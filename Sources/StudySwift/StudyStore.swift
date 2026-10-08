@@ -12,6 +12,14 @@ import StudyCore
     let repository: LibraryRepository
     private var writable = true
     private var job: Task<Void, Never>?
+    private struct PendingScroll {
+        let courseID: UUID
+        let part: Int
+        let section: Int
+        let offset: Double
+    }
+    private var pendingScroll: PendingScroll?
+    private var scrollSave: Task<Void, Never>?
     init(root: URL) {
         do { repository = try LibraryRepository(root: root) }
         catch { repository = .unavailable(root: root); writable = false; self.error = "학습 자료 폴더를 준비하지 못했습니다. 저장과 생성을 중지했습니다. \(error.localizedDescription)" }
@@ -23,8 +31,16 @@ import StudyCore
     }
     var selected: Course? { library.courses.first { $0.id == library.selectedCourseId } }
     var record: LessonRecord? { selected?.lessons[String(selected?.currentPart ?? 1)] }
-    var progress: PartProgress { selected?.progress[String(selected?.currentPart ?? 1)] ?? PartProgress() }
+    var progress: PartProgress {
+        var value = selected?.progress[String(selected?.currentPart ?? 1)] ?? PartProgress()
+        if let pendingScroll, pendingScroll.courseID == selected?.id,
+           pendingScroll.part == selected?.currentPart, pendingScroll.section == value.section {
+            value.scrollOffset = pendingScroll.offset
+        }
+        return value
+    }
     func commit(_ change: (inout LibraryState) throws -> Void) {
+        flushScrollOffset()
         guard writable else { error = "보관함을 읽지 못해 저장을 중지했습니다. 원본 파일을 확인하세요."; return }
         do { var next = library; try change(&next); try repository.save(next); library = next }
         catch { self.error = "저장하지 못했습니다. \(error.localizedDescription)" }
@@ -41,6 +57,31 @@ import StudyCore
     }
     func setProgress(_ change: (inout PartProgress) -> Void) {
         update { course in let key = String(course.currentPart); var value = course.progress[key] ?? PartProgress(); change(&value); course.progress[key] = value }
+    }
+    func setScrollOffset(_ offset: Double) {
+        guard writable, offset.isFinite, let course = selected else { return }
+        pendingScroll = PendingScroll(courseID: course.id, part: course.currentPart, section: progress.section, offset: max(0, offset))
+        scrollSave?.cancel()
+        // Scroll events must not publish the whole library and rebuild the document.
+        // Persist after idle, or immediately before navigation and app termination.
+        scrollSave = Task { [weak self] in
+            do { try await Task.sleep(for: .milliseconds(350)) }
+            catch { return }
+            self?.flushScrollOffset()
+        }
+    }
+    func flushScrollOffset() {
+        scrollSave?.cancel(); scrollSave = nil
+        guard let pending = pendingScroll else { return }
+        pendingScroll = nil
+        commit { state in
+            guard let index = state.courses.firstIndex(where: { $0.id == pending.courseID }) else { return }
+            let key = String(pending.part)
+            var value = state.courses[index].progress[key] ?? PartProgress()
+            guard value.section == pending.section else { return }
+            value.scrollOffset = pending.offset
+            state.courses[index].progress[key] = value
+        }
     }
     func complete() {
         guard record != nil else { error = "교재를 준비한 뒤 현재 파트를 완료할 수 있습니다."; return }

@@ -18,6 +18,7 @@ import StudyCore
             LibraryView(store: store)
                 .preferredColorScheme(appearance == "system" ? nil : appearance == "dark" ? .dark : .light)
                 .frame(minWidth: 860, minHeight: 600)
+                .onAppear { delegate.store = store }
         }
         .defaultSize(width: 1120, height: 780)
         .commands {
@@ -36,11 +37,13 @@ import StudyCore
     }
 }
 @MainActor final class AppDelegate: NSObject, NSApplicationDelegate {
+    weak var store: StudyStore?
     func applicationDidFinishLaunching(_ notification: Notification) {
         NSApplication.shared.setActivationPolicy(.regular); NSApplication.shared.activate(ignoringOtherApps: true)
     }
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool { true }
-    func applicationWillTerminate(_ notification: Notification) { CLIRunner.terminateAll() }
+    func applicationWillResignActive(_ notification: Notification) { store?.flushScrollOffset() }
+    func applicationWillTerminate(_ notification: Notification) { store?.flushScrollOffset(); CLIRunner.terminateAll() }
 }
 
 struct SettingsView: View {

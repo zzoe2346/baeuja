@@ -13,7 +13,7 @@ struct ReaderView: View {
                 Divider()
                 GeometryReader { viewport in
                     NativeReaderScroll(offset: store.progress.scrollOffset, onOffset: { value in
-                        if abs(store.progress.scrollOffset - value) > 1 { store.setProgress { $0.scrollOffset = value } }
+                        if abs(store.progress.scrollOffset - value) > 1 { store.setScrollOffset(value) }
                     }) {
                         VStack(alignment: .leading, spacing: 20) {
                             if section < record.lesson.sections.count { lessonSection(record, index: max(0, section)) }
