@@ -9,6 +9,7 @@
 | 로컬 빌드 도구 | Swift 6.4 / macOS SDK 27.0. Xcode 또는 CLT 가능 |
 | Swift 언어 모드 | Swift 5. Swift 6 strict concurrency 전환 완료로 표시하지 않는다. |
 | CI | macOS 26 / Xcode 26.6 고정 선택. 자동 검사와 로컬 샘플 QA. UI·실제 AI 생성 합격을 뜻하지 않는다. |
+| CI Actions | checkout 7.0.1 / upload-artifact 7.0.2, Node 24. 공식 안정 릴리스의 전체 commit SHA를 고정한다. |
 | 최신 디자인 API | macOS 26+ Glass availability 분기. 이전 지원 OS는 표준 bordered/bar |
 | 미확인 | macOS 14~25 실기기·Intel·접근성 전체 조합·장시간 성능 |
 
@@ -35,3 +36,4 @@
 - [Apple SwiftUI 성능](https://developer.apple.com/videos/play/wwdc2025/306/)
 - [Swift migration guide](https://www.swift.org/migration/documentation/migrationguide/)
 - [GitHub macOS runner 이미지](https://github.com/actions/runner-images/blob/main/images/macos/macos-26-arm64-Readme.md)
+- [checkout 7.0.1 릴리스](https://github.com/actions/checkout/releases/tag/v7.0.1), [upload-artifact 7.0.2 릴리스](https://github.com/actions/upload-artifact/releases/tag/v7.0.2): 2026-10-08 확인. Node 20 폐기 경고에 대응해 Node 24 릴리스로 변경했다. 실제 실행 결과는 해당 revision의 Quality 실행으로 확인한다.
