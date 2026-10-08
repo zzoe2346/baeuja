@@ -56,4 +56,4 @@ swift run StudyQA --data-dir ./work/live-qa --verify-saved-visuals
 DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer swift run PackageApp --release --refresh-icon
 ```
 
-Icon Composer의 이미지 내보내기로 README용 [PNG](../Artwork/AppIcon/Exports/AppIcon-default.png)도 갱신합니다. 원본, `Compiled/`의 결과와 해시를 같은 커밋에 포함하고 Finder, Dock과 앱 정보의 아이콘을 실제로 확인합니다. PNG를 앱에 덮어씌우는 코드를 추가하면 시스템 아이콘 재질과 표시 변형을 잃을 수 있으므로 사용하지 않습니다.
+Icon Composer의 이미지 내보내기로 README용 [PNG](../Artwork/AppIcon/Preview/AppIcon-default.png)도 갱신합니다. 원본, `Compiled/`의 결과와 해시를 같은 커밋에 포함하고 Finder, Dock과 앱 정보의 아이콘을 실제로 확인합니다. PNG를 앱에 덮어씌우는 코드를 추가하면 시스템 아이콘 재질과 표시 변형을 잃을 수 있으므로 사용하지 않습니다.

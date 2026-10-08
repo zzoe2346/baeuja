@@ -191,3 +191,5 @@ CI의 실행 결과는 아래에 별도로 기록한다. 현재 Swift 언어 모
 - 교재와 읽기 화면의 구현을 변경하지 않았으므로 README의 기존 학습 화면 8개를 유지했다. 이번 작업은 아이콘과 패키징이며 실제 AI 교재 생성이나 스크롤 성능을 새로 검증한 것으로 보고하지 않는다.
 
 Release 실행 파일 SHA-256: `2fee7afe8667e2c94fa6fdd9de898f3c7ad99188c56d4fbf360d81c1b9afcdbf`. 컴파일된 아이콘의 해시는 [hashes.json](../Artwork/AppIcon/Compiled/hashes.json)에 기록했다. 앱 아이콘 원본과 후보는 [아이콘 안내](../Artwork/AppIcon/README.md)에 있다.
+
+README 헤더를 가운데 정렬하고 아이콘 PNG를 Git에 포함했다. 기존 `exports/` 제외 규칙에 걸리던 공개용 이미지를 `Preview/`로 옮겼으며 실제 추적 목록을 확인했다.

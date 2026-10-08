@@ -2,13 +2,13 @@
 
 사용자가 선택한 **B안: 노란 배경, 빨간 머리띠 캐릭터와 파란 책**을 적용했습니다. 캐릭터는 사용자가 직접 그린 둥근 머리, 빈 원형 눈과 작은 `^` 입을 참고했습니다. 원본 그림 파일은 공개 저장소에 포함하지 않았습니다.
 
-<img src="Exports/AppIcon-default.png" width="256" alt="적용한 B안의 macOS 아이콘">
+<img src="Preview/AppIcon-default.png" width="256" alt="적용한 B안의 macOS 아이콘">
 
 ## 파일
 
 - `AppIcon.icon/`: Icon Composer에서 편집하는 원본. 전경 PNG와 단색 배경, 위치 및 재질 설정을 포함합니다.
 - `Compiled/`: Xcode 27의 `actool`이 만든 `Assets.car`, 이전 macOS용 `AppIcon.icns`, Info.plist 항목과 검증 해시입니다.
-- `Exports/AppIcon-default.png`: Icon Composer에서 내보낸 README용 기본 표시 이미지입니다.
+- `Preview/AppIcon-default.png`: Icon Composer에서 내보낸 README용 기본 표시 이미지입니다.
 - `Candidates/`: 선택 전에 제시한 네 가지 초안 원본입니다. 앱에는 B안만 사용합니다.
 - [prompts.json](prompts.json): 생성과 배경 분리의 출처 및 프롬프트입니다.
 

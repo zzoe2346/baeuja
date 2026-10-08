@@ -1,6 +1,8 @@
-<img src="Artwork/AppIcon/Exports/AppIcon-default.png" width="96" alt="노란 배경에서 머리띠를 매고 책을 읽는 캐릭터">
+<p align="center">
+  <img src="Artwork/AppIcon/Preview/AppIcon-default.png" width="128" alt="노란 배경에서 머리띠를 매고 책을 읽는 캐릭터">
+</p>
 
-# Study Swift
+<h1 align="center">Study Swift</h1>
 
 관심 있는 주제를 학습 과정으로 만들고, 교재와 그림을 읽으며 퀴즈로 복습하는 macOS 앱입니다. 과학, 역사, 언어처럼 배우고 싶은 주제를 직접 입력해 시작할 수 있습니다.
 
