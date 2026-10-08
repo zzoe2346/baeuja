@@ -11,11 +11,17 @@ private struct StudyActionStyle: ViewModifier {
 
     @ViewBuilder func body(content: Content) -> some View {
         if #available(macOS 26.0, *) {
-            if prominent { content.buttonStyle(.glassProminent) }
-            else { content.buttonStyle(.glass) }
+            if prominent {
+                content.buttonStyle(.glassProminent)
+            } else {
+                content.buttonStyle(.glass)
+            }
         } else {
-            if prominent { content.buttonStyle(.borderedProminent) }
-            else { content.buttonStyle(.bordered) }
+            if prominent {
+                content.buttonStyle(.borderedProminent)
+            } else {
+                content.buttonStyle(.bordered)
+            }
         }
     }
 }
