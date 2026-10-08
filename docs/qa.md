@@ -168,3 +168,7 @@ swift run StudyQA --data-dir ./work/live-qa --verify-saved-visuals
 - 포맷·내부 구조·도구 구성 변화로 화면 디자인을 바꾸지 않아 기존 README PNG를 유지했다. 캡처 날짜·버전과 출처 manifest를 추가했다. 기존 배포 기록의 revision·바이너리를 연결했으며 과거 각 캡처와 해당 바이너리의 대응을 새로 입증한 것으로 표시하지 않았다.
 
 CI의 실행 결과는 아래에 별도로 기록한다. 현재 Swift 언어 모드는 5이며 strict concurrency 전환·실제 스크롤 trace baseline·구형 OS 실기기 검증은 완료했다고 보고하지 않는다.
+
+### 원격 CI 확인
+
+[`630bf61`의 Quality 실행](https://github.com/zzoe2346/study-swift/actions/runs/37742120823)이 성공했다. macOS 26 / Xcode 26.6에서 포맷·린트·구조·문서 링크·스크린샷 기록, 43개 테스트, Release 패키징과 고정 샘플의 공통 자료 준비·그림·PDF·재개 단계가 모두 통과했다. 이 결과는 macOS 14~25 실기기·Intel·실제 AI 생성·체감 스크롤 성능의 검증으로 확장하지 않는다.
