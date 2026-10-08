@@ -7,6 +7,8 @@ import StudyCore
     @Published var activity = ""
     @Published var error: String?
     @Published var newTopic = ""
+    @Published var showingReadingOptions = false
+    @Published var showingImport = false
     @Published var showingNewCourse = false
     @Published var completionPresented = false
     let repository: LibraryRepository

@@ -14,8 +14,6 @@ struct LibraryView: View {
     @ObservedObject var store: StudyStore
     @AppStorage("appearance") private var appearance = "light"
     @AppStorage("readerFontSize") private var fontSize = ReaderTypography.defaultSize
-    @ViewState<Bool> private var importing = false
-    @ViewState<Bool> private var readingOptions = false
     @ViewState<String> private var search = ""
 
     private var courses: [Course] {
@@ -98,42 +96,41 @@ struct LibraryView: View {
                 .clipped()
             }.background(.background)
         }
-        .toolbarBackground(.hidden, for: .windowToolbar)
         .navigationTitle(store.selected?.plan.title ?? "Study Swift")
         .searchable(text: $search, placement: .sidebar, prompt: "보관함 검색")
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
-                Button { store.showingNewCourse = true } label: { Label("새 학습 과정", systemImage: "square.and.pencil") }
+                Button { store.showingNewCourse = true } label: { Label("새 과정", systemImage: "square.and.pencil").labelStyle(.titleAndIcon) }
                     .help("새 학습 과정 (⌘N)").disabled(store.busy)
             }
             if store.selected != nil {
                 ToolbarItem(placement: .primaryAction) {
-                    Button { readingOptions.toggle() } label: { Label("읽기 설정", systemImage: "textformat.size") }
+                    Button { store.showingReadingOptions.toggle() } label: { Label("읽기 설정", systemImage: "textformat.size").labelStyle(.titleAndIcon) }
                         .help("글자 크기와 테마")
-                        .popover(isPresented: $readingOptions) { ReadingOptions(fontSize: $fontSize, appearance: $appearance) }
+                        .popover(isPresented: $store.showingReadingOptions) { ReadingOptions(fontSize: $fontSize, appearance: $appearance) }
                 }
             }
             if store.record != nil {
                 ToolbarItem(placement: .primaryAction) {
-                    Button { store.exportPDF() } label: { Label("PDF 내보내기", systemImage: "square.and.arrow.up") }
+                    Button { store.exportPDF() } label: { Label("PDF 내보내기", systemImage: "square.and.arrow.up").labelStyle(.titleAndIcon) }
                         .help("파트 PDF 내보내기 (⌘P)").disabled(store.busy)
                 }
             }
             ToolbarItem(placement: .primaryAction) {
                 Menu {
-                    Button { importing = true } label: { Label("교재 가져오기…", systemImage: "square.and.arrow.down") }
+                    Button { store.showingImport = true } label: { Label("교재 가져오기…", systemImage: "square.and.arrow.down") }
                     if store.record != nil {
                         Divider()
                         Button("교재 다시 생성") { store.loadLesson(force: true) }
                         Button("원본 그림 재시도") { store.retryVisuals() }
                     }
-                } label: { Label("더 보기", systemImage: "ellipsis.circle") }.disabled(store.busy)
+                } label: { Label("더 보기", systemImage: "ellipsis").labelStyle(.titleAndIcon) }.disabled(store.busy)
             }
         }
         .sheet(isPresented: $store.showingNewCourse) { NewCourseView(store: store) }
         .alert("확인이 필요합니다", isPresented: Binding(get: { store.error != nil }, set: { if !$0 { store.error = nil } })) { Button("확인") { store.error = nil } } message: { Text(store.error ?? "") }
         .sheet(isPresented: $store.completionPresented) { CompletionView(store: store) }
-        .fileImporter(isPresented: $importing, allowedContentTypes: [.json]) { result in
+        .fileImporter(isPresented: $store.showingImport, allowedContentTypes: [.json]) { result in
             switch result { case .success(let url): store.importLesson(url); case .failure(let error): store.error = error.localizedDescription }
         }
     }
@@ -281,13 +278,13 @@ struct CompletionView: View {
                 ForEach(Array(record.lesson.followUps.enumerated()), id: \.offset) { _, follow in
                     Button { store.completionPresented = false; store.newTopic = follow.topic; store.showingNewCourse = true } label: {
                         VStack(alignment: .leading, spacing: 4) {
-                            Text(follow.topic).font(.headline)
-                            Text(follow.reason).font(.callout).foregroundStyle(.secondary)
-                        }.frame(maxWidth: .infinity, alignment: .leading).padding(8)
-                    }.buttonStyle(.bordered)
+                            Text(follow.topic).font(.headline).lineLimit(nil).fixedSize(horizontal: false, vertical: true)
+                            Text(follow.reason).font(.callout).foregroundStyle(.secondary).lineLimit(nil).fixedSize(horizontal: false, vertical: true)
+                        }.multilineTextAlignment(.leading).frame(maxWidth: .infinity, alignment: .leading).padding(8)
+                    }.studyActionStyle()
                 }
             }
-            HStack { Spacer(); Button("교재로 돌아가기") { store.completionPresented = false }.keyboardShortcut(.cancelAction) }
+            HStack { Spacer(); Button("교재로 돌아가기") { store.completionPresented = false }.keyboardShortcut(.cancelAction).studyActionStyle() }
         }.padding(24).frame(width: 460)
     }
 }

@@ -26,10 +26,20 @@ import StudyCore
                 Button("새 학습 과정") { store.showingNewCourse = true }.keyboardShortcut("n").disabled(store.busy)
                 Button("파트 PDF 내보내기") { store.exportPDF() }.keyboardShortcut("p").disabled(store.record == nil || store.busy)
             }
-            CommandGroup(after: .textEditing) {
+            CommandGroup(after: .importExport) {
+                Button("교재 가져오기…") { store.showingImport = true }.disabled(store.busy)
+            }
+            SidebarCommands()
+            CommandGroup(after: .sidebar) {
+                Button("읽기 설정") { store.showingReadingOptions = true }.disabled(store.selected == nil)
+
                 Button("본문 크게") { fontSize = min(ReaderTypography.sizeRange.upperBound, fontSize + 1) }.keyboardShortcut("+", modifiers: .command)
                 Button("본문 작게") { fontSize = max(ReaderTypography.sizeRange.lowerBound, fontSize - 1) }.keyboardShortcut("-", modifiers: .command)
                 Button("기본 글자 크기") { fontSize = ReaderTypography.defaultSize }.keyboardShortcut("0", modifiers: .command)
+            }
+            CommandMenu("학습") {
+                Button("교재 다시 생성") { store.loadLesson(force: true) }.disabled(store.record == nil || store.busy)
+                Button("원본 그림 재시도") { store.retryVisuals() }.disabled(store.record == nil || store.busy)
             }
             CommandGroup(replacing: .help) { Button("사용 안내") { NSWorkspace.shared.open(URL(string: "https://github.com/zzoe2346/study-swift#readme")!) } }
         }

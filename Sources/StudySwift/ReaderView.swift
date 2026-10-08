@@ -79,6 +79,9 @@ struct ReaderView: View {
                     if visual.kind == "image", let file = visual.file, let url = try? store.repository.assetURL(directory: record.materialDirectory, name: file), let data = try? VisualSafety.png(url), let image = NSImage(data: data) {
                         Image(nsImage: image).resizable().scaledToFit()
                             .frame(maxWidth: 740, maxHeight: 420).accessibilityLabel(definition.altText)
+                        Button { NSWorkspace.shared.open(url) } label: {
+                            Label("그림 크게 보기", systemImage: "arrow.up.left.and.arrow.down.right")
+                        }.font(.callout).studyActionStyle().help("저장된 원본 그림을 기본 이미지 앱에서 엽니다.")
                     } else if visual.kind == "ascii" {
                         MonospacedBlock(text: visual.content, fontSize: max(12, fontSize - 3), padding: 12)
                             .background(Color(nsColor: .controlBackgroundColor), in: RoundedRectangle(cornerRadius: 6))
