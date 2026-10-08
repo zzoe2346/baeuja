@@ -193,3 +193,7 @@ CI의 실행 결과는 아래에 별도로 기록한다. 현재 Swift 언어 모
 Release 실행 파일 SHA-256: `2fee7afe8667e2c94fa6fdd9de898f3c7ad99188c56d4fbf360d81c1b9afcdbf`. 컴파일된 아이콘의 해시는 [hashes.json](../Artwork/AppIcon/Compiled/hashes.json)에 기록했다. 앱 아이콘 원본과 후보는 [아이콘 안내](../Artwork/AppIcon/README.md)에 있다.
 
 README 헤더를 가운데 정렬하고 아이콘 PNG를 Git에 포함했다. 기존 `exports/` 제외 규칙에 걸리던 공개용 이미지를 `Preview/`로 옮겼으며 실제 추적 목록을 확인했다.
+
+## 학습 시각자료를 보여 주는 README
+
+2026-10-08, 기반 revision `0eaefbc`. 구현 언어를 강조하던 소개를 정리하고 빌드 도구 요건을 개발 안내로 옮겼다. 이름을 검토하는 동안 README 제목의 Swift 표기를 제거했으며 실제 앱과 저장소 이름은 아직 변경하지 않았다. 대표 이미지는 텍스트 화면에서 `diagram.png`로 바꿨다. 기존에 실제 생성한 달 교재에서 설명 그림이 크게 보이는 캡처이며 파일을 시각 검토하고 출처 기록을 확인했다. 개념도, 흐름도와 삽화를 교재와 함께 제공하는 기능도 소개했다. 앱 화면 구현과 캡처 파일을 바꾸지 않아 기존 manifest를 유지했다.

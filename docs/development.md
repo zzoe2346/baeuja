@@ -4,6 +4,10 @@ Swift Package Manager로 빌드하는 Swift 전용 macOS 앱입니다. SwiftUI�
 
 그림은 앱 안의 로컬 WebKit으로 렌더링하며, PDF는 AppKit, CoreText와 CoreGraphics로 생성합니다. Python 백엔드나 별도 HTTP 서버는 없습니다. 패키징 도구는 리소스를 포함하는 `.app`을 만들고 실행 파일의 SDK와 최소 OS 기록을 검증합니다.
 
+## 빌드 환경
+
+빌드에는 Swift 6 도구와 macOS 26 이상 SDK가 필요합니다. Xcode 또는 Command Line Tools를 사용할 수 있습니다. 아이콘 원본을 다시 컴파일할 때는 아래 아이콘 갱신 안내에 따라 Xcode를 선택합니다.
+
 ## 공통 검사
 
 ```sh
