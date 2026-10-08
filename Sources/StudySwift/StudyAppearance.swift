@@ -1,5 +1,10 @@
 import SwiftUI
 
+enum ReaderTypography {
+    static let defaultSize = 18.0
+    static let sizeRange = 14.0...36.0
+}
+
 /// Keep native action styles available on the app's macOS 14 minimum target.
 private struct StudyActionStyle: ViewModifier {
     var prominent: Bool
@@ -20,4 +25,3 @@ extension View {
         modifier(StudyActionStyle(prominent: prominent))
     }
 }
-

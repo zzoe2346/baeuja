@@ -4,7 +4,7 @@ import StudyCore
 @main struct StudySwiftApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) var delegate
     @StateObject private var store: StudyStore
-    @AppStorage("readerFontSize") private var fontSize = 18.0
+    @AppStorage("readerFontSize") private var fontSize = ReaderTypography.defaultSize
     @AppStorage("appearance") private var appearance = "light"
     init() {
         let args = ProcessInfo.processInfo.arguments
@@ -26,9 +26,9 @@ import StudyCore
                 Button("파트 PDF 내보내기") { store.exportPDF() }.keyboardShortcut("p").disabled(store.record == nil || store.busy)
             }
             CommandGroup(after: .textEditing) {
-                Button("본문 크게") { fontSize = min(28, fontSize + 1) }.keyboardShortcut("+", modifiers: .command)
-                Button("본문 작게") { fontSize = max(14, fontSize - 1) }.keyboardShortcut("-", modifiers: .command)
-                Button("기본 글자 크기") { fontSize = 18 }.keyboardShortcut("0", modifiers: .command)
+                Button("본문 크게") { fontSize = min(ReaderTypography.sizeRange.upperBound, fontSize + 1) }.keyboardShortcut("+", modifiers: .command)
+                Button("본문 작게") { fontSize = max(ReaderTypography.sizeRange.lowerBound, fontSize - 1) }.keyboardShortcut("-", modifiers: .command)
+                Button("기본 글자 크기") { fontSize = ReaderTypography.defaultSize }.keyboardShortcut("0", modifiers: .command)
             }
             CommandGroup(replacing: .help) { Button("사용 안내") { NSWorkspace.shared.open(URL(string: "https://github.com/zzoe2346/study-swift#readme")!) } }
         }
@@ -44,7 +44,7 @@ import StudyCore
 }
 
 struct SettingsView: View {
-    @AppStorage("readerFontSize") private var fontSize = 18.0
+    @AppStorage("readerFontSize") private var fontSize = ReaderTypography.defaultSize
     @AppStorage("appearance") private var appearance = "light"
     @AppStorage("codexExecutable") private var executable = CodexSettings.defaultExecutable
     @AppStorage("searchMode") private var search = "cached"
@@ -53,7 +53,7 @@ struct SettingsView: View {
         Form {
             Section("읽기 환경") {
                 Picker("화면 밝기", selection: $appearance) { Text("밝게").tag("light"); Text("어둡게").tag("dark"); Text("시스템 설정").tag("system") }
-                Slider(value: $fontSize, in: 14...28, step: 1) { Text("본문 크기 · \(Int(fontSize))pt") }
+                Slider(value: $fontSize, in: ReaderTypography.sizeRange, step: 1) { Text("본문 크기 · \(Int(fontSize))pt") }
                 Text("글자 크기와 테마는 앱을 다시 열어도 유지됩니다.").foregroundStyle(.secondary)
             }
             Section("교재 생성") {

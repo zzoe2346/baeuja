@@ -13,7 +13,7 @@ private enum SidebarSelection: Hashable {
 struct LibraryView: View {
     @ObservedObject var store: StudyStore
     @AppStorage("appearance") private var appearance = "light"
-    @AppStorage("readerFontSize") private var fontSize = 18.0
+    @AppStorage("readerFontSize") private var fontSize = ReaderTypography.defaultSize
     @ViewState<Bool> private var importing = false
     @ViewState<Bool> private var readingOptions = false
     @ViewState<String> private var search = ""
@@ -78,23 +78,25 @@ struct LibraryView: View {
             .navigationSplitViewColumnWidth(min: 220, ideal: 250, max: 320)
             .disabled(store.busy)
         } detail: {
-            VStack(spacing: 0) {
-                if store.busy {
-                    HStack(spacing: 10) {
-                        ProgressView().controlSize(.small)
-                        Text(store.activity).font(.callout)
-                        Spacer()
-                        Button("취소") { store.cancel() }
-                    }.padding(12).background(.bar)
-                    Divider()
-                }
-                if let course = store.selected {
-                    if course.status == .draft { PlanEditor(store: store, course: course).id(course.id) }
-                    else { ReaderView(store: store, course: course).id(course.id) }
-                } else { welcome }
-            }
-            .background(.background)
-
+            // The document's AppKit intrinsic size must not enlarge the split column.
+            GeometryReader { detail in
+                VStack(spacing: 0) {
+                    if store.busy {
+                        HStack(spacing: 10) {
+                            ProgressView().controlSize(.small)
+                            Text(store.activity).font(.callout)
+                            Spacer()
+                            Button("취소") { store.cancel() }
+                        }.padding(12).background(.bar)
+                        Divider()
+                    }
+                    if let course = store.selected {
+                        if course.status == .draft { PlanEditor(store: store, course: course).id(course.id) }
+                        else { ReaderView(store: store, course: course).id(course.id) }
+                    } else { welcome }
+                }.frame(width: detail.size.width, height: detail.size.height, alignment: .top)
+                .clipped()
+            }.background(.background)
         }
         .toolbarBackground(.hidden, for: .windowToolbar)
         .navigationTitle(store.selected?.plan.title ?? "Study Swift")
@@ -161,7 +163,7 @@ private struct ReadingOptions: View {
             }
             HStack(spacing: 12) {
                 Image(systemName: "textformat.size.smaller").foregroundStyle(.secondary)
-                Slider(value: $fontSize, in: 14...28, step: 1).accessibilityLabel("본문 크기")
+                Slider(value: $fontSize, in: ReaderTypography.sizeRange, step: 1).accessibilityLabel("본문 크기")
                 Image(systemName: "textformat.size.larger").foregroundStyle(.secondary)
             }
             Picker("테마", selection: $appearance) {
@@ -169,7 +171,7 @@ private struct ReadingOptions: View {
                 Text("어둡게").tag("dark")
                 Text("시스템").tag("system")
             }.pickerStyle(.segmented)
-            Button("기본 18pt로 복원") { fontSize = 18 }.studyActionStyle()
+            Button("기본 18pt로 복원") { fontSize = ReaderTypography.defaultSize }.studyActionStyle()
                 .help("기본 글자 크기 (⌘0)")
         }.padding(20).frame(width: 260)
     }

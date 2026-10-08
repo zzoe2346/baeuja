@@ -4,26 +4,28 @@ import StudyCore
 struct ReaderView: View {
     @ObservedObject var store: StudyStore
     let course: Course
-    @AppStorage("readerFontSize") private var fontSize = 18.0
+    @AppStorage("readerFontSize") private var fontSize = ReaderTypography.defaultSize
     var section: Int { store.progress.section }
     var body: some View {
         VStack(spacing: 0) {
             if let record = store.record {
-                header(record)
+                header(record).fixedSize(horizontal: false, vertical: true)
                 Divider()
-                NativeReaderScroll(offset: store.progress.scrollOffset, onOffset: { value in
-                    if abs(store.progress.scrollOffset - value) > 1 { store.setProgress { $0.scrollOffset = value } }
-                }) {
-                    VStack(alignment: .leading, spacing: 20) {
-                        if section < record.lesson.sections.count { lessonSection(record, index: max(0, section)) }
-                        else { quizSection(record) }
-                    }
-                    .font(.system(size: fontSize)).textSelection(.enabled)
-                    .padding(.horizontal, 32).padding(.vertical, 28)
-                    .padding(.bottom, 80)
-                    .frame(maxWidth: 820, alignment: .leading).frame(maxWidth: .infinity, alignment: .top)
-                }.id("\(course.currentPart)-\(section)")
-                    .overlay(alignment: .bottom) { footer(record) }
+                GeometryReader { viewport in
+                    NativeReaderScroll(offset: store.progress.scrollOffset, onOffset: { value in
+                        if abs(store.progress.scrollOffset - value) > 1 { store.setProgress { $0.scrollOffset = value } }
+                    }) {
+                        VStack(alignment: .leading, spacing: 20) {
+                            if section < record.lesson.sections.count { lessonSection(record, index: max(0, section)) }
+                            else { quizSection(record) }
+                        }
+                        .font(.system(size: fontSize)).textSelection(.enabled)
+                        .padding(.horizontal, 32).padding(.vertical, 28)
+                        .frame(maxWidth: 820, alignment: .leading).frame(maxWidth: .infinity, alignment: .top)
+                    }.frame(width: viewport.size.width, height: viewport.size.height)
+                }.id("\(course.currentPart)-\(section)").clipped()
+                Divider()
+                footer(record).fixedSize(horizontal: false, vertical: true)
             } else {
                 ContentUnavailableView {
                     Label("이 파트의 교재를 준비하세요", systemImage: "book.pages")
