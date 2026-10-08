@@ -174,3 +174,7 @@ CI의 실행 결과는 아래에 별도로 기록한다. 현재 Swift 언어 모
 [`630bf61`의 Quality 실행](https://github.com/zzoe2346/study-swift/actions/runs/37742120823)이 성공했다. macOS 26 / Xcode 26.6에서 포맷·린트·구조·문서 링크·스크린샷 기록, 43개 테스트, Release 패키징과 고정 샘플의 공통 자료 준비·그림·PDF·재개 단계가 모두 통과했다. 이 결과는 macOS 14~25 실기기·Intel·실제 AI 생성·체감 스크롤 성능의 검증으로 확장하지 않는다.
 
 문서 반영 뒤 [`2578e81`의 실행](https://github.com/zzoe2346/study-swift/actions/runs/37742618334)도 성공했다. 실행 annotation에서 checkout/upload-artifact v4의 Node 20 폐기 경고를 확인해, 공식 안정 릴리스 checkout 7.0.1과 upload-artifact 7.0.2의 SHA를 확인하고 Node 24로 변경했다. 이 CI 도구 변경의 최종 실행 결과는 GitHub Quality에서 별도로 확인한다.
+
+## README 구성과 글쓰기 지침 정리
+
+2026-10-08. [CodeEdit](https://github.com/CodeEditApp/CodeEdit)와 [UTM](https://github.com/utmapp/UTM)의 README를 참고해 소개, 실제 화면, 시작 방법을 중심으로 구성했다. 구현 컴포넌트와 상세 검증 설명은 첫 화면에서 제거하고, 기존 사용법과 QA 명령은 별도 사용 안내와 개발 안내로 옮겼다. 가운데점 남용을 피하는 지침을 AGENTS.md에 추가했다. 문서 변경이며 앱 동작이나 화면은 변경하지 않아 기존 캡처를 유지했다.
