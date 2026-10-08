@@ -63,14 +63,17 @@ for item in try manager.contentsOfDirectory(at: build, includingPropertiesForKey
 where item.pathExtension == "bundle" {
     try manager.copyItem(at: item, to: resources.appendingPathComponent(item.lastPathComponent))
 }
-let info: [String: Any] = [
+var info: [String: Any] = [
     "CFBundleName": "Study Swift", "CFBundleDisplayName": "Study Swift",
     "CFBundleIdentifier": "com.zzoe.study-swift", "CFBundleExecutable": "StudySwift",
-    "CFBundlePackageType": "APPL", "CFBundleShortVersionString": "0.1.0", "CFBundleVersion": "1",
+    "CFBundlePackageType": "APPL", "CFBundleShortVersionString": "0.1.0", "CFBundleVersion": "2",
     "LSMinimumSystemVersion": minimumVersion, "DTSDKName": "macosx" + sdkVersion,
     "NSHighResolutionCapable": true, "NSPrincipalClass": "NSApplication",
 ]
+let iconInfo = try installAppIcon(
+    root: root, resources: resources, refresh: CommandLine.arguments.contains("--refresh-icon"))
+info.merge(iconInfo) { _, iconValue in iconValue }
 try PropertyListSerialization.data(fromPropertyList: info, format: .xml, options: 0).write(
     to: contents.appendingPathComponent("Info.plist"))
 try run("/usr/bin/codesign", ["--force", "--deep", "--sign", "-", bundle.path])
-print("앱 생성: \(bundle.path) · SDK \(sdkVersion) / 최소 macOS \(minimumVersion)")
+print("앱 생성: \(bundle.path) / SDK \(sdkVersion) / 최소 macOS \(minimumVersion)")

@@ -178,3 +178,16 @@ CI의 실행 결과는 아래에 별도로 기록한다. 현재 Swift 언어 모
 ## README 구성과 글쓰기 지침 정리
 
 2026-10-08. [CodeEdit](https://github.com/CodeEditApp/CodeEdit)와 [UTM](https://github.com/utmapp/UTM)의 README를 참고해 소개, 실제 화면, 시작 방법을 중심으로 구성했다. 구현 컴포넌트와 상세 검증 설명은 첫 화면에서 제거하고, 기존 사용법과 QA 명령은 별도 사용 안내와 개발 안내로 옮겼다. 가운데점 남용을 피하는 지침을 AGENTS.md에 추가했다. 문서 변경이며 앱 동작이나 화면은 변경하지 않아 기존 캡처를 유지했다.
+
+## B 아이콘 적용
+
+2026-10-08, 기반 revision `a9f4c36` 이후의 아이콘 변경. 사용자가 처음 언급한 A를 정정해 노란 배경의 머리띠 캐릭터와 책인 B를 선택했다. 앱 이름과 저장 경로는 유지했다.
+
+- 환경: macOS 27.0.1 (26A434), arm64, Swift 6.4, SDK 27.0. Icon Composer 27과 Xcode 27의 `actool`을 사용했다. 전역 `xcode-select`는 Command Line Tools로 유지하고 재컴파일 명령만 `DEVELOPER_DIR`로 Xcode를 선택했다.
+- 사용자 그림을 참고한 초안 A~D와 생성 프롬프트를 보관했다. B의 투명 전경과 노란 단색 배경을 실제 `.icon`으로 구성했다. 손과 머리띠 끝이 잘리지 않도록 배율을 80%로 조정하고 Composer의 Default, Dark와 Mono를 시각 검토했다. README PNG도 Composer에서 내보냈다.
+- `--refresh-icon`의 실제 재컴파일과 기본 Command Line Tools 패키징 모두 성공했다. `assetutil`로 `Assets.car`의 IconGroup 3개와 IconImageStack 3개를 확인했다. 생성된 `AppIcon.icns`도 포함하고 컴파일러의 `CFBundleIconName`과 `CFBundleIconFile`을 병합했다. macOS 14 실기기에서 이전 OS용 표시를 검증한 것은 아니다.
+- `scripts/check.sh` 통과: 포맷, SwiftLint 30개 파일 위반 0건, 문서와 기존 스크린샷 8개 검사, 43개 테스트, Release 패키징과 서명 검증. 별도 임시 복사본에서 원본 JSON 변경과 Assets.car 변경을 각각 거부하는지 검증했다. 이 과정에서 `/var`와 `/private/var`의 경로 차이를 수정하고 정상 복사본 설치를 다시 확인했다.
+- 샘플 보관함과 별도 bundle identifier의 QA 앱을 실제로 실행했다. 앱 정보 창에서 B 아이콘과 버전 `0.1.0 (2)`를 확인했다. 배포 앱도 Finder에서 같은 노란 캐릭터로 표시됐다. Dock 직접 관찰은 컴퓨터 조작 도구의 응답 시간 초과로 완료하지 못했다. 아이콘 리소스와 앱 정보의 정상 표시는 확인했으나 이를 Dock 시각 검증으로 기록하지 않는다.
+- 교재와 읽기 화면의 구현을 변경하지 않았으므로 README의 기존 학습 화면 8개를 유지했다. 이번 작업은 아이콘과 패키징이며 실제 AI 교재 생성이나 스크롤 성능을 새로 검증한 것으로 보고하지 않는다.
+
+Release 실행 파일 SHA-256: `2fee7afe8667e2c94fa6fdd9de898f3c7ad99188c56d4fbf360d81c1b9afcdbf`. 컴파일된 아이콘의 해시는 [hashes.json](../Artwork/AppIcon/Compiled/hashes.json)에 기록했다. 앱 아이콘 원본과 후보는 [아이콘 안내](../Artwork/AppIcon/README.md)에 있다.

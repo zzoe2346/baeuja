@@ -44,3 +44,16 @@ swift run StudyQA --data-dir ./work/live-qa --verify-saved-visuals
 - [유지보수 구조 결정](decisions/001-maintenance.md)
 - [macOS 디자인 기준](design.md)
 - [디자인 스킬 검토](design-review.md)
+- [앱 아이콘 원본과 후보](../Artwork/AppIcon/README.md)
+
+## 아이콘 갱신
+
+[AppIcon.icon](../Artwork/AppIcon/AppIcon.icon/icon.json)은 Icon Composer에서 만든 편집 가능한 원본입니다. 노란 배경 위에 캐릭터와 책을 하나의 전경 레이어로 배치했습니다. 기본 패키징은 저장소에 포함된 Apple 도구의 컴파일 결과를 사용하므로 Command Line Tools에서도 실행됩니다. 원본과 결과의 SHA-256이 달라지면 오래된 아이콘을 넣지 않고 실패합니다.
+
+원본을 편집한 뒤 Xcode 27 이상을 선택해 다시 컴파일합니다. 전역 `xcode-select` 설정을 바꿀 필요는 없습니다.
+
+```sh
+DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer swift run PackageApp --release --refresh-icon
+```
+
+Icon Composer의 이미지 내보내기로 README용 [PNG](../Artwork/AppIcon/Exports/AppIcon-default.png)도 갱신합니다. 원본, `Compiled/`의 결과와 해시를 같은 커밋에 포함하고 Finder, Dock과 앱 정보의 아이콘을 실제로 확인합니다. PNG를 앱에 덮어씌우는 코드를 추가하면 시스템 아이콘 재질과 표시 변형을 잃을 수 있으므로 사용하지 않습니다.
