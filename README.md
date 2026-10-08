@@ -2,9 +2,9 @@
 
 궁금한 주제를 작은 학습 과정으로 만들고, 교재·그림·퀴즈를 읽으며 공부하는 **Swift 전용 macOS 네이티브 앱**입니다. 기존 [Study TUI](https://github.com/zzoe2346/study-tui)의 학습 흐름을 밝고 읽기 편한 데스크톱 화면으로 옮겼습니다.
 
-기본 본문 **18pt**, **14~28pt 크기 조절**, 밝은·어두운·시스템 테마를 제공합니다. 과학·역사·언어 등 직접 입력한 주제를 공부할 수 있습니다. 생성에는 기존 ChatGPT 구독으로 로그인한 Codex CLI를 사용합니다.
+기본 본문 **18pt**, **14~36pt 크기 조절**, 밝은·어두운·시스템 테마를 제공합니다. 과학·역사·언어 등 직접 입력한 주제를 공부할 수 있습니다. 생성에는 기존 ChatGPT 구독으로 로그인한 Codex CLI를 사용합니다.
 
-화면은 `NavigationSplitView`·네이티브 사이드바·툴바·Form·Picker·DisclosureGroup으로 구성했습니다. macOS 26 이상에서 페이지 이동과 주요 동작에 **실제 Liquid Glass API**를 사용하며, 이전 지원 OS에는 표준 버튼을 제공합니다. [Apple HIG 적용 기준](docs/design.md)을 문서로 남겼습니다.
+화면은 `NavigationSplitView`·네이티브 사이드바·툴바·Form·Picker·DisclosureGroup으로 구성했습니다. 최신 SDK로 링크해 시스템 탐색·검색·툴바 디자인을 사용하고, macOS 26 이상에서 페이지 이동과 주요 동작에 **실제 Liquid Glass API**를 적용합니다. 상단에는 **새 과정 · 읽기 설정 · PDF 내보내기 · 더 보기**의 이름을 함께 표시합니다. [Apple HIG 적용 기준](docs/design.md)을 문서로 남겼습니다.
 
 ![실제 앱의 교재 읽기 화면](docs/assets/lesson.png)
 
@@ -20,7 +20,7 @@
 
 ## 실제 실행 화면
 
-교재 읽기·어두운 테마·그림은 실제 Codex 구독으로 생성한 달의 위상 주제입니다. 과정 편집 화면은 그 실제 계획을 QA 보관함에 초안으로 복사하고 앱에서 제목을 수정했습니다. 퀴즈는 앱에 포함된 고정 인덱스 샘플입니다. 디자인 검증에는 저장된 교재를 사용해 추가 AI 호출을 하지 않았습니다. 합성한 UI 목업을 사용하지 않았습니다.
+교재 읽기·어두운 테마·그림은 실제 Codex 구독으로 생성한 달의 위상 주제입니다. 과정 편집 화면은 그 실제 계획을 QA 보관함에 초안으로 복사하고 앱에서 제목을 수정했습니다. 퀴즈는 이번에 앱에서 실제 생성한 트랜잭션 아웃박스 교재입니다. 계획·교재 생성에 두 번의 AI 작업을 사용했고 이후 그림 재시도·재개·PDF 검증은 AI 호출 없이 진행했습니다. 모든 캡처는 최신 SDK로 패키징한 실제 네이티브 앱 화면입니다.
 
 | 과정 초안 편집 | 퀴즈 메모와 선택 정답 공개 |
 |---|---|
@@ -43,7 +43,7 @@ swift run PackageApp --release
 open "dist/Study Swift.app"
 ```
 
-`PackageApp`은 실행 파일과 로컬 Mermaid·스키마 리소스를 포함하는 `.app`을 만들고 ad-hoc 서명합니다. Python, 별도 HTTP 서버, 외부 Swift 패키지가 필요하지 않습니다. 개발자 인증서 서명·공증·App Store 배포는 제공하지 않습니다.
+`PackageApp`은 실제 SDK 버전과 macOS 14 최소 버전을 구분해 링크하고 실행 파일의 SDK 기록을 검증합니다. 로컬 Mermaid·스키마 리소스를 포함하는 `.app`을 만들고 ad-hoc 서명합니다. Python, 별도 HTTP 서버, 외부 Swift 패키지가 필요하지 않습니다. 개발자 인증서 서명·공증·App Store 배포는 제공하지 않습니다.
 
 샘플을 전용 보관함에서 실행하려면 다음 명령을 사용합니다. 샘플 표시와 읽기는 AI를 호출하지 않습니다.
 
@@ -68,7 +68,7 @@ codex login status
 
 ## 그림, PDF, 가져오기
 
-Mermaid와 안전한 SVG는 앱 안의 로컬 WebKit에서 PNG로 렌더링합니다. 필요한 삽화는 Codex의 네이티브 이미지 기능으로 생성합니다. 원본을 사용할 수 없으면 교재에 미리 저장된 대체 후보를 순서대로 사용하고, 마지막 ASCII 도식을 표시합니다. 상단 `…` 메뉴에서 원본 그림을 다시 시도할 수 있습니다.
+Mermaid와 안전한 SVG는 앱 안의 로컬 WebKit에서 PNG로 렌더링합니다. 필요한 삽화는 Codex의 네이티브 이미지 기능으로 생성합니다. 원본을 사용할 수 없으면 교재에 미리 저장된 대체 후보를 순서대로 사용하고, 마지막 ASCII 도식을 표시합니다. **더 보기 → 원본 그림 재시도**에서 다시 준비할 수 있습니다. **그림 크게 보기**는 저장된 원본을 기본 이미지 앱에서 엽니다. ASCII와 코드의 줄·공백은 보존하며, 폭이 부족하면 가로로 스크롤합니다.
 
 PDF는 AppKit·CoreText·CoreGraphics로 생성합니다. 본문·예제·화면과 같은 선택 그림·퀴즈를 포함하고, **정답과 해설은 문제 이후의 새 페이지**에서 시작합니다.
 
@@ -101,6 +101,7 @@ swift run StudyQA --data-dir ./work/local-qa --render-demo --stress-pdf --reopen
 ```sh
 swift run StudyQA --data-dir ./work/live-qa --live --live-image
 swift run StudyQA --data-dir ./work/live-qa --reopen --export-saved
+swift run StudyQA --data-dir ./work/live-qa --verify-saved-visuals
 ```
 
 구조·진도·저장·CLI 종료/취소·시각자료 안전성·PDF를 검증합니다. 실제 호출, UI 조작, PDF 페이지 검토와 검증 한계는 [QA 기록](docs/qa.md)에 구분해서 기록했습니다. 생성 구조 검증은 교재의 모든 사실이나 실제 학습 시간을 보증하지 않습니다.
@@ -108,6 +109,7 @@ swift run StudyQA --data-dir ./work/live-qa --reopen --export-saved
 - [요구사항](docs/requirements.md)
 - [상세설계](docs/lld.md)
 - [macOS 디자인 기준](docs/design.md)
+- [추가 스킬·툴바 디자인 검토](docs/design-review.md)
 - [협업·Git 규칙](AGENTS.md)
 
 프로젝트 코드는 [MIT](LICENSE), 포함한 Mermaid 런타임은 [별도 MIT 고지](Sources/StudyCore/Resources/NOTICE.md)를 따릅니다.

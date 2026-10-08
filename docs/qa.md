@@ -7,7 +7,7 @@
 | 항목 | 확인한 값 |
 |---|---|
 | OS / CPU | macOS 27.0.1 (26A434), Apple Silicon arm64 |
-| 도구 | Command Line Tools, Swift 6.4 |
+| 도구 | Command Line Tools, Swift 6.4, 최종 링크 SDK 27.0 |
 | 배포 최소 타깃 | macOS 14 |
 | 인증 / CLI | 기존 ChatGPT 구독 로그인, Codex CLI 0.160.1 |
 | 앱 | Release, 0.1.0, ad-hoc 서명 |
@@ -17,14 +17,14 @@
 
 ## 자동 검증
 
-실제 새 저장소에서 `swift run RunTests`를 실행해 **4개 suite, 37개 테스트가 모두 통과**했다. 앱 Release 빌드도 성공했다. CLT가 존재하지 않는 Developer 프레임워크 검색 경로에 대해 출력한 링크 경고는 빌드·실행을 막지 않았다.
+최종 변경 후 `swift run RunTests`를 실행해 **4개 suite, 38개 테스트가 모두 통과**했다. 앱 Release 빌드도 성공했다. CLT가 존재하지 않는 Developer 프레임워크 검색 경로에 대해 출력한 링크 경고는 빌드·실행을 막지 않았다. 아래 초기 검증과 첫 디자인 개선의37개·28pt 기록은 당시 버전의 결과이며, 최신 변경은 별도 절에 기록한다.
 
 | 범위 | 테스트 수 | 주요 검증 |
 |---|---:|---|
 | ModelTests | 18 | 버전 1 JSON, 30~45분 계획·연속 파트, 필수 내용·시각자료·출처, 중복/미참조 ID, 언어 학습 대상 문장, ASCII 제한, 순서와 무관한 명시적 완료, Markdown 코드·표·단계 |
 | RepositoryTests | 5 | 메모·정답 공개·진도 재개, 손상/미지원 버전 보존, 경로 탈출·심볼릭 링크·과도한 파일 크기 거부 |
 | ProcessTests | 9 | API 키 제거, 이벤트/종료 코드, 실패 이벤트, 큰 stdin, 조기 stdin 종료, 시간 제한·취소·앱 종료 시 자식 그룹 종료, 실행 경로 오류 |
-| RenderingTests | 5 | SVG 실행/외부 참조 차단, 저장 ASCII 대체와 AI 미호출, 후보 전체 실패, 한글 PDF·정답 페이지 분리, PDF 실패 시 이전 파일 보존 |
+| RenderingTests | 6 | SVG 실행/외부 참조 차단, 로컬 sequence symbol 허용과 중첩 실행 차단, 저장 ASCII 대체와 AI 미호출, 후보 전체 실패, 한글 PDF·정답 페이지 분리, PDF 실패 시 이전 파일 보존 |
 
 프로세스 종료 테스트는 실제 로컬 fixture 자식 프로세스를 사용한다. 원격 AI 응답을 흉내 내는 fixture를 실제 서비스 성공으로 간주하지 않았다.
 
@@ -92,16 +92,48 @@
 
 이 개선에서도37개 자동 테스트가 모두 통과했고 최종 Release 빌드가 성공했다. macOS 14~25의 fallback은 availability 분기와 최소 타깃 빌드로 확인했으며 해당 OS 실기기 실행은 수행하지 않았다. 현재 Apple 문서와 코드의 대응은 [디자인 기준](design.md)에 기록했다.
 
+## 최신 디자인·실제 생성·스크롤 검증
+
+2026-10-08. 별도 QA 보관함에서 최신 Release 앱을 실행했다. 사용자가 추가한 원래 과정과 저장 폴더는 덮어쓰지 않았다. 최신 변경 후 38개 테스트가 4개 suite에서 통과했고 Release 앱을 다시 패키징했다.
+
+| 영역 | 실제 확인과 결과 |
+|---|---|
+| SDK와 Liquid Glass | 이전 앱의 `LC_BUILD_VERSION`은 SDK 14.0이었다. 실제 SDK 링크 후 minOS 14.0 / SDK 27.0을 확인했다. 기본 사이드바 버튼·검색창·이름 있는 그룹 툴바가 새 디자인으로 표시된다. 툴바 배경 숨김 우회 없이 세로 경계가 이어진다. |
+| 명령과 일관성 | Pages 방식으로 새 과정·읽기 설정·PDF 내보내기·더 보기 이름 표시. File의 새 과정·가져오기, View의 읽기 설정·크기, 학습의 재생성·그림 재시도 확인. 밝은/어두운 화면, popover, grouped 설정·계획 Form, 퀴즈, 새 과정·완료 sheet를 대조했다. |
+| 실제 새 생성 | 앱의 새 과정에서 아웃박스 패턴 입력 → 실제 계획 생성 → 제목 수정·저장 → 시작 → 실제 1파트 35분 교재 생성. 개념·원리 2개·예제 2개·요약·퀴즈 표시. 새 작업 폴더는 계획·교재의 2개이며 그림 준비·PDF에는 추가 AI 호출이 없다. |
+| 시퀀스 그림 | 실제 v2 Mermaid가 안전한 SVG symbol 요소 때문에 대체 ASCII로 표시되던 원인을 수정했다. 재시도 후 v1/v2 모두 PNG, 대체 사유 없음. 중첩 script·외부 use·이벤트 속성은 계속 차단하는 회귀 검증을 추가했다. |
+| 코드·표·ASCII | 실제 생성 의사코드의 들여쓰기·줄과 비교 표의 열·셀 줄바꿈 확인. 861pt 창·36pt 본문에서 실제 생성 ASCII 대체 도식의 열 유지·가로 스크롤 확인. 하단 탐색은 별도 행이며 큰 글씨와 겹치지 않는다. |
+| 원본 확대 | 그림 크게 보기 → macOS 미리보기에 해당 QA 원본 PNG가 열림. 기본 이미지 앱의 확대/실제 크기 컨트롤에 접근 가능. |
+| 퀴즈·재개·완료 | 실제 퀴즈에 QA 답안 메모 입력·첫 정답 공개. 스크롤 직후 종료·재실행해 같은 내용·메모·공개 상태·스크롤 비율 약 0.23 복원. 현재 파트 완료 후 1/1 과정 완료, 복습 유지. 긴 심화 주제 설명의 여러 줄 표시 확인. |
+
+### 실제 생성 내용의 검토와 수정
+
+같은 DB 트랜잭션의 주문·이벤트 저장, 별도 릴레이 발행, 발행 후 기록 전 장애의 중복 가능성, 소비자 처리 기록과 업무 변경의 원자성을 [Microservices.io](https://microservices.io/patterns/data/transactional-outbox.html) 및 [AWS 공식 안내](https://docs.aws.amazon.com/prescriptive-guidance/latest/cloud-design-patterns/transactional-outbox.html)와 대조했다. 전체 사실 검증이나 35분 학습 시간 실험은 수행하지 않았다.
+
+실제 생성 v1은 서로 연결되지 않은 Mermaid 묶음이 위·아래로 배치됐는데 본문·캡션은 왼쪽·오른쪽으로 설명했다. 원본 생성 기록을 QA 폴더에 보존하고 QA 사본의 설명을 ‘DB 먼저’·‘브로커 먼저’라는 사례 이름으로 수정했다. 시각자료 사본에는 보이지 않는 Mermaid 배치 연결을 추가해 두 묶음을 나란히 렌더링했다. 이는 자동 생성 원본 그대로의 결과가 아닌 **생성 후 검토·수정한 QA 사본**이다. 앱 생성 지침도 사례 이름 참조와 큰 비교 그림 분할을 요청하도록 보강했다. 모든 새 모델 출력에서 항상 지켜진다는 검증은 하지 않았다.
+
+그림 복구 후 PDF 10페이지를 내보내 모두 검토했다. 내용 수정 후 최종 10페이지도 다시 확인했다. 그림·캡션·표·의사코드·한글·출처, 문제 8페이지와 정답 9페이지의 분리를 확인했다. 교재·생성 로그·메모는 Git에 넣지 않는다.
+
+### 스크롤 저장 검증
+
+실제 `StudyStore`를 사용하는 별도 검증 실행 파일에서 1000개 offset을 연속 입력했다. 이전 방식은 1000번 보관함을 발행·저장했고, 개선 방식은 입력 중 0번·350ms idle 이후 1번이었다. 과정·파트 이동, idle 저장, 즉시 flush, NaN/Inf 거부와 저장 파일을 검사했다. 실제 앱의 세 번 스크롤 제스처에서도 움직임 후 저장 3회를 확인했다. 종료 직전 위치 저장은 위 재개 검증으로 확인했다.
+
+이 결과는 이벤트마다 JSON 저장·전체 본문 재구성을 유발하는 경로를 줄였다는 증거다. FPS, 실제 트랙패드 장시간 연속 스크롤, 대규모 보관함의 프레임 성능을 측정한 것은 아니다.
+
 ## 스크린샷 출처
+
+현재 파일은 모두 SDK 27.0으로 링크한 Release 앱에서 다시 캡처했다. 창과 본문의 세로 경계, 이름 있는 툴바와 별도 하단 행이 실제 화면에 보인다.
 
 | 파일 | 실제 화면 |
 |---|---|
 | [lesson.png](assets/lesson.png) | 실제 달의 위상 교재, Release, 밝은 테마 18pt |
 | [plan.png](assets/plan.png) | 실제 달의 위상 계획의 QA 초안 사본을 앱에서 제목 편집 |
 | [diagram.png](assets/diagram.png) | 실제 달 교재의 SVG를 PNG로 표시, Release |
-| [quiz.png](assets/quiz.png) | 고정 인덱스 샘플, 메모·정답 공개 |
+| [quiz.png](assets/quiz.png) | 이번에 실제 생성한 아웃박스 교재, QA 메모·정답 공개 |
 | [options.png](assets/options.png) | 실제 달 교재의 네이티브 읽기 설정 popover,18pt 밝은 테마 |
 | [dark.png](assets/dark.png) | 실제 달의 위상 교재, 어두운 테마 21pt |
+| [compact.png](assets/compact.png) | 861pt 좁은 창, 이름 있는 시스템 툴바 |
+| [ascii-large.png](assets/ascii-large.png) | 실제 생성 대체 ASCII, 36pt 본문·861pt 창·가로 스크롤 |
 
 합성한 UI나 텍스트를 덧씌운 화면을 사용하지 않았다. 생성 교재·작업 로그·메모·인증 파일은 Git에 넣지 않으며 공개 스크린샷은 이 QA용 학습 주제와 샘플만 포함한다.
 
@@ -113,11 +145,12 @@ swift run PackageApp --release
 swift run StudyQA --data-dir ./work/local-qa --render-demo --stress-pdf --reopen
 ```
 
-다음 첫 명령만 실제 구독을 사용한다. 생성 후 두 번째 명령은 저장 자료만 읽는다.
+다음 첫 명령만 실제 구독을 사용한다. 생성 후 나머지 명령은 저장 자료만 읽는다.
 
 ```sh
 swift run StudyQA --data-dir ./work/live-qa --live --live-image
 swift run StudyQA --data-dir ./work/live-qa --reopen --export-saved
+swift run StudyQA --data-dir ./work/live-qa --verify-saved-visuals
 ```
 
 실제 모델 출력과 페이지 수는 새 실행마다 달라질 수 있다. 긴 시간 연속 사용·대규모 보관함·VoiceOver 전체 흐름·다른 macOS/Intel 하드웨어·CLI의 다른 버전은 검증하지 않았다. 기존 SQLite 보관함 전체 자동 이전은 구현 범위에 포함하지 않는다.
