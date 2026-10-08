@@ -38,7 +38,13 @@ POSIX spawn의 독립 프로세스 그룹과 stdin/stdout/stderr 파이프를 �
 
 필수 그림마다 원본, 저장 후보 순으로 처리한다. ASCII는 인쇄 가능한 ASCII/LF만, 탭 없이 최대72열이다. SVG는 XML 파서로 요소·이벤트·외부 참조·DOCTYPE/ENTITY를 거부한다. Mermaid는 로컬 번들을 strict 모드로 실행하고 생성 SVG도 검사한다. WebKit 결과는 PNG로 고정해 화면과 PDF가 같은 선택 자산을 사용한다. 렌더링 제한 시간은 30초다.
 
-UI는 SwiftUI 텍스트·코드·표·목록·메모·시각자료를 사용한다. 과정 초안은 제목·목표·범위와 파트별 제목·시간·목표를 네이티브 입력으로 편집하며 파트를 추가/삭제할 수 있다. 본문은 실제 viewport 폭으로 NSHostingView의 높이를 계산하고 NSScrollView의 내용별 오프셋을 저장·복원한다. 동일 종류의 내용이 여러 개면 탭 이름에 순서를 표시한다. Markdown 원시 HTML을 실행하거나 원격 이미지를 다운로드하지 않는다. 기본 본문 18pt, 범위 14~28pt, 밝은 테마, 내용 폭 최대900pt다.
+UI는 SwiftUI 텍스트·코드·표·목록·메모·시각자료를 사용한다. 과정 초안은 제목·목표·범위와 파트별 제목·시간·목표를 네이티브 입력으로 편집하며 파트를 추가/삭제할 수 있다. 본문은 실제 viewport 폭으로 NSHostingView의 높이를 계산하고 NSScrollView의 내용별 오프셋을 저장·복원한다. 동일 종류의 내용이 여러 개면 탭 이름에 순서를 표시한다. Markdown 원시 HTML을 실행하거나 원격 이미지를 다운로드하지 않는다. 기본 본문 18pt, 범위 14~28pt, 밝은 테마, 여백을 포함한 내용 폭 최대820pt다.
+
+탐색은 두 열 `NavigationSplitView`이며 과정과 목차를 표준 sidebar List에 모은다. 툴바 배경을 숨겨 네이티브 사이드바의 경계를 창 상단부터 사용한다. 픽셀 오프셋·별도 분할선·비공개 AppKit 클래스 보정은 없다. 읽기 옵션은 popover의 Slider/Picker, 계획은 grouped Form, 선택 정답 공개는 DisclosureGroup이다. 내용 Picker는 폭에 따라 segmented/menu로 전환한다.
+
+macOS 26 이상에서는 `StudyActionStyle`의 glass/glassProminent 버튼과 `GlassEffectContainer`/regular glassEffect를 하단 조작 층에 사용한다. 이전 지원 OS에는 bordered/bar를 제공한다. 하단 오버레이를 위한 본문 마지막 여백은80pt다. `NativeReaderScroll.sizeThatFits`는 문서의 intrinsic 크기가 아닌 SwiftUI의 viewport 제안을 반환해 그림을 포함한 새 내용으로 전환할 때 AppKit/SwiftUI 크기 계산의 재진입을 방지한다. 문서 높이와 실제 폭의 줄바꿈·저장 오프셋 처리는 기존 NSHostingView/NSScrollView가 맡는다.
+
+단일 `Window(id: "study")`와 `CommandGroup(replacing: .newItem)`으로 ⌘N이 별도 앱 창을 열지 않고 새 과정 sheet를 연다. Settings와 읽기 화면은 동일한 시스템/밝게/어둡게 선택을 따른다. 디자인 근거는 [디자인 기준](design.md)에 기록했다.
 
 PDF는 A4, 시스템 한글 글꼴과 고정폭 코드/ASCII, CoreText 줄바꿈·페이지 나눔을 사용한다. 문제를 새 페이지에서 시작하고 정답은 문제 이후의 새 페이지에서 시작한다. 생성 후 PDFKit으로 문서를 다시 열고 유효성을 확인한 뒤 출력 파일을 원자적으로 교체한다.
 
@@ -48,4 +54,4 @@ PDF는 A4, 시스템 한글 글꼴과 고정폭 코드/ASCII, CoreText 줄바꿈
 
 macOS 27 SDK의 SwiftUI `State` 매크로는 Xcode 전용 플러그인을 요구한다. 지역 타입 별칭을 통해 기존 property wrapper를 사용해 Command Line Tools로도 빌드한다. `RunTests`는 활성 `swiftc`의 도구 폴더에서 Testing 매크로 라이브러리를 찾아 필요할 때 명시적으로 로드한다. 테스트 프레임워크는 Swift Testing이다.
 
-앱 패키징은 SwiftPM의 `--show-bin-path` 결과를 사용해 실행 파일과 모든 리소스 번들을 복사하고 ad-hoc 서명한다. 현재 구현의 macOS 최소 타깃은14이며 실제 실행 환경과 확인하지 않은 범위는 QA 기록에 적는다.
+앱 패키징은 SwiftPM의 `--show-bin-path` 결과를 사용해 실행 파일과 모든 리소스 번들을 복사하고 ad-hoc 서명한다. Glass API를 포함한 UI 빌드에는 macOS 26 SDK 이상이 필요하다. 현재 구현의 macOS 최소 타깃은14이며 실제 실행 환경과 확인하지 않은 범위는 QA 기록에 적는다.

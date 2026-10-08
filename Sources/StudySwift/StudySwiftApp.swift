@@ -14,15 +14,15 @@ import StudyCore
         _store = StateObject(wrappedValue: StudyStore(root: root))
     }
     var body: some Scene {
-        WindowGroup("Study Swift") {
+        Window("Study Swift", id: "study") {
             LibraryView(store: store)
                 .preferredColorScheme(appearance == "system" ? nil : appearance == "dark" ? .dark : .light)
-                .frame(minWidth: 960, minHeight: 660)
+                .frame(minWidth: 860, minHeight: 600)
         }
-        .defaultSize(width: 1280, height: 850)
+        .defaultSize(width: 1120, height: 780)
         .commands {
-            CommandGroup(after: .newItem) {
-                Button("새 학습 과정") { store.showingNewCourse = true }.keyboardShortcut("n")
+            CommandGroup(replacing: .newItem) {
+                Button("새 학습 과정") { store.showingNewCourse = true }.keyboardShortcut("n").disabled(store.busy)
                 Button("파트 PDF 내보내기") { store.exportPDF() }.keyboardShortcut("p").disabled(store.record == nil || store.busy)
             }
             CommandGroup(after: .textEditing) {
@@ -32,7 +32,7 @@ import StudyCore
             }
             CommandGroup(replacing: .help) { Button("사용 안내") { NSWorkspace.shared.open(URL(string: "https://github.com/zzoe2346/study-swift#readme")!) } }
         }
-        Settings { SettingsView().frame(width: 520).preferredColorScheme(appearance == "dark" ? .dark : .light) }
+        Settings { SettingsView().frame(width: 520).preferredColorScheme(appearance == "system" ? nil : appearance == "dark" ? .dark : .light) }
     }
 }
 @MainActor final class AppDelegate: NSObject, NSApplicationDelegate {
