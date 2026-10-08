@@ -2,6 +2,18 @@
 
 제품 계약은 [요구사항](requirements.md), 협업 규칙은 [AGENTS.md](../AGENTS.md)를 따른다.
 
+변경의 완료 조건은 [품질](quality.md), 도구·OS 변경은 [호환성](compatibility.md), 구조 선택의 이유는 [결정 001](decisions/001-maintenance.md)에 기록한다.
+
+## 책임과 의존성 경계
+
+- `StudySwift/Features`: Library, Planning, Reader 화면. 사용자의 입력·표시를 담당한다. Reader의 Markdown과 AppKit 스크롤 bridge는 별도 파일이다.
+- `StudyStore`: 메인 액터의 UI 상태와 사용자 명령 연결, 성공한 보관함 사본의 채택, 생성 job·취소와 스크롤 저장 lifecycle을 소유한다. 직접 렌더링·자료 파일 준비를 반복하지 않고 `LessonPreparation`에 위임한다.
+- `StudyCore/Domain`: Foundation 기반 Codable 값·검증·Markdown 파싱·고정 샘플. UI·CLI·파일 저장을 실행하지 않는다. framework import 제한은 project-check가 확인하지만 별도 타깃의 컴파일 경계는 아직 아니다.
+- `StudyCore/Application`: `LessonPreparation`. 검증 → 새 자료 디렉터리 → 렌더링 → JSON 원자적 쓰기 → 취소 검사 → 채택 순서. 실패·취소·채택 거부 시 준비한 디렉터리를 삭제한다. UI 상태를 소유하지 않는다.
+- `StudyCore/Infrastructure`: Storage, Generation, Rendering, Export. 저장·CLI·WebKit·PDF를 담당한다. Core는 macOS 인프라도 포함하며 플랫폼 독립 라이브러리라고 주장하지 않는다.
+
+Domain은 상위 계층을 참조하지 않고, UI는 Application/Infrastructure를 사용한다. AppKit/WebKit 작업은 메인 액터 요구를 지킨다. 자료 채택은 동기 callback으로 Store의 원자적 보관함 저장 결과를 확인한다. 준비한 레코드를 채택하기 전에 사용 중인 참조를 덮어쓰지 않는다. 린트/정적 검사는 모든 의존성·동시성 계약을 증명하지 않으므로 관련 실패·취소 테스트와 실제 실행을 함께 확인한다.
+
 ## 구성
 
 `StudySwift`는 SwiftUI 화면과 메인 액터의 `StudyStore`를 소유한다. `StudyCore`는 Codable 모델·검증, 원자적 보관함, Codex CLI, 시각자료와 PDF를 제공한다. `PackageApp`은 Swift 빌드 결과를 `.app`으로 묶는다. `RunTests`는 Swift Testing의 도구 환경을 준비하고, `StudyQA`는 격리된 로컬/실제 구독 QA를 실행한다. Python·별도 HTTP 서버·외부 패키지 의존성은 없다.

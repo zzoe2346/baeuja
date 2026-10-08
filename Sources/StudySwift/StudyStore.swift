@@ -164,71 +164,47 @@ import StudyCore
     func loadLesson(force: Bool = false) {
         guard let course = selected, course.status != .draft, force || record == nil else { return }
         let ordinal = course.currentPart, client = self.client
-        let images = UserDefaults.standard.object(forKey: "generateImages") as? Bool ?? true
+        let provider = imageProvider(client: client, isDemo: course.isDemo)
         run("교재와 시각자료를 준비하고 있습니다…") { [weak self] in
             guard let self else { return }
-            let lesson: Lesson
-            if course.isDemo {
-                lesson = DemoContent.lesson(ordinal: ordinal)
-            } else {
-                lesson = try await client.lesson(plan: course.plan, ordinal: ordinal)
-            }
-            let (relative, directory) = try self.repository.materialDirectory()
-            var committed = false
-            defer { if !committed { try? FileManager.default.removeItem(at: directory) } }
-            let renderer = VisualRenderer()
-            let provider: ((String, URL) async throws -> Void)? =
-                images && !course.isDemo
-                ? { prompt, output in try await client.image(prompt: prompt, destination: output) }
-                : nil
-            let visuals = try await renderer.render(lesson, directory: directory, image: provider)
-            try Task.checkCancellation()
-            try StudyJSON.encoder().encode(lesson).write(
-                to: directory.appendingPathComponent("lesson.json"), options: .atomic)
-            let record = LessonRecord(lesson: lesson, visuals: visuals, materialDirectory: relative)
-            self.update(course.id) { $0.lessons[String(ordinal)] = record }
-            committed =
-                self.library.courses.first(where: { $0.id == course.id })?.lessons[String(ordinal)]?
-                .revision == record.revision
+            let lesson =
+                course.isDemo
+                ? DemoContent.lesson(ordinal: ordinal)
+                : try await client.lesson(plan: course.plan, ordinal: ordinal)
+            try await self.prepareLesson(
+                lesson, courseID: course.id, ordinal: ordinal, image: provider)
         }
     }
     func retryVisuals() {
         guard let course = selected, let old = record else { return }
-        let ordinal = course.currentPart, client = self.client
-        let images = UserDefaults.standard.object(forKey: "generateImages") as? Bool ?? true
+        let provider = imageProvider(client: client, isDemo: course.isDemo)
         run("저장된 그림 정의로 원본을 다시 준비하고 있습니다…") { [weak self] in
-            guard let self else { return };
-            let (relative, directory) = try self.repository.materialDirectory();
-            var committed = false
-            defer { if !committed { try? FileManager.default.removeItem(at: directory) } }
-            let provider: ((String, URL) async throws -> Void)? =
-                images && !course.isDemo
-                ? { prompt, output in try await client.image(prompt: prompt, destination: output) }
-                : nil
-            let visuals = try await VisualRenderer().render(
-                old.lesson, directory: directory, image: provider)
-            try Task.checkCancellation()
-            let value = LessonRecord(
-                lesson: old.lesson, visuals: visuals, materialDirectory: relative)
-            try StudyJSON.encoder().encode(old.lesson).write(
-                to: directory.appendingPathComponent("lesson.json"), options: .atomic)
-            self.update(course.id) { $0.lessons[String(ordinal)] = value }
-            committed =
-                self.library.courses.first(where: { $0.id == course.id })?.lessons[String(ordinal)]?
-                .revision == value.revision
+            guard let self else { return }
+            try await self.prepareLesson(
+                old.lesson, courseID: course.id, ordinal: course.currentPart, image: provider)
+        }
+    }
+    private func imageProvider(client: CodexClient, isDemo: Bool) -> LessonImageProvider? {
+        let images = UserDefaults.standard.object(forKey: "generateImages") as? Bool ?? true
+        guard images && !isDemo else { return nil }
+        return { prompt, output in try await client.image(prompt: prompt, destination: output) }
+    }
+    private func prepareLesson(
+        _ lesson: Lesson, courseID: UUID, ordinal: Int, image: LessonImageProvider?
+    ) async throws {
+        _ = try await LessonPreparation(repository: repository).prepare(lesson, image: image) {
+            record in
+            self.update(courseID) { $0.lessons[String(ordinal)] = record }
+            return self.library.courses.first(where: { $0.id == courseID })?.lessons[
+                String(ordinal)]?.revision == record.revision
         }
     }
     func importLesson(_ url: URL) {
         run("교재 파일과 그림을 확인하고 있습니다…") { [weak self] in
             guard let self else { return }
-            let accessed = url.startAccessingSecurityScopedResource();
+            let accessed = url.startAccessingSecurityScopedResource()
             defer { if accessed { url.stopAccessingSecurityScopedResource() } }
-            let lesson = try StudyJSON.read(Lesson.self, from: url); try lesson.validate()
-            let (relative, directory) = try self.repository.materialDirectory()
-            var committed = false;
-            defer { if !committed { try? FileManager.default.removeItem(at: directory) } }
-            // Import never makes an AI call, including image generation.
-            let visuals = try await VisualRenderer().render(lesson, directory: directory)
+            let lesson = try StudyJSON.read(Lesson.self, from: url)
             let plan = Plan(
                 topic: lesson.title, title: lesson.title, objectives: ["가져온 교재를 읽고 이해한다"],
                 scope: "가져온 파트 한 개",
@@ -237,17 +213,16 @@ import StudyCore
                         ordinal: 1, title: lesson.title, objectives: ["교재와 퀴즈를 학습한다"],
                         minutes: lesson.minutes)
                 ])
-            var course = Course(plan: plan); course.status = .active
-            let record = LessonRecord(
-                lesson: lesson, visuals: visuals, materialDirectory: relative);
-            course.lessons["1"] = record
-            try Task.checkCancellation();
-            try StudyJSON.encoder().encode(lesson).write(
-                to: directory.appendingPathComponent("lesson.json"), options: .atomic)
-            self.commit {
-                $0.courses.append(course); $0.selectedCourseId = course.id
+            // Import prepares local candidates only; it never calls AI.
+            _ = try await LessonPreparation(repository: self.repository).prepare(lesson) { record in
+                var course = Course(plan: plan)
+                course.status = .active
+                course.lessons["1"] = record
+                self.commit {
+                    $0.courses.append(course); $0.selectedCourseId = course.id
+                }
+                return self.library.courses.contains(where: { $0.id == course.id })
             }
-            committed = self.library.courses.contains(where: { $0.id == course.id })
         }
     }
     func exportPDF() {

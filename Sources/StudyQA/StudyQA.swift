@@ -54,23 +54,41 @@ import StudyCore
         if args.contains("--render-demo") {
             var course = DemoContent.course()
             for ordinal in 1...course.plan.parts.count {
-                let lesson = DemoContent.lesson(ordinal: ordinal),
-                    (relative, directory) = try repository.materialDirectory()
+                let lesson = DemoContent.lesson(ordinal: ordinal)
                 let renderer = VisualRenderer()
-                let visuals = try await renderer.render(lesson, directory: directory)
-                guard visuals.allSatisfy({ $0.kind == "image" && $0.fallbackReason == nil }) else {
-                    throw StudyError.invalid(
-                        "유효한 샘플 Mermaid가 렌더링되지 않았습니다: "
-                            + renderer.diagnostics.joined(separator: "; "))
+                let preparation = LessonPreparation(repository: repository) {
+                    lesson, directory, image in
+                    try await renderer.render(lesson, directory: directory, image: image)
                 }
-                let record = LessonRecord(
-                    lesson: lesson, visuals: visuals, materialDirectory: relative);
-                course.lessons[String(ordinal)] = record
+                guard
+                    let record = try await preparation.prepare(
+                        lesson,
+                        adopt: { record in
+                            guard
+                                record.visuals.allSatisfy({
+                                    $0.kind == "image" && $0.fallbackReason == nil
+                                })
+                            else {
+                                throw StudyError.invalid(
+                                    "유효한 샘플 Mermaid가 렌더링되지 않았습니다: "
+                                        + renderer.diagnostics.joined(separator: "; "))
+                            }
+                            course.lessons[String(ordinal)] = record
+                            var next = state
+                            if let index = next.courses.firstIndex(where: { $0.id == course.id }) {
+                                next.courses[index] = course
+                            } else {
+                                next.courses.append(course)
+                            }
+                            next.selectedCourseId = course.id
+                            try repository.save(next)
+                            state = next
+                            return true
+                        })
+                else { throw StudyError.invalid("QA 교재가 채택되지 않았습니다.") }
                 try pdf(record: record, repository: repository, name: "demo-part-\(ordinal)")
             }
-            state.courses.append(course); state.selectedCourseId = course.id;
-            try repository.save(state)
-            print("로컬 Mermaid·PNG·샘플 PDF 검증 완료")
+            print("공통 자료 준비·로컬 Mermaid·PNG·샘플 PDF 검증 완료")
         }
         if args.contains("--stress-pdf") {
             var record = DemoContent.course().lessons["1"]!
