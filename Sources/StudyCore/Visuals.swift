@@ -28,7 +28,7 @@ private final class SVGValidator: NSObject, XMLParserDelegate {
     var valid = true; var root: String?; var issues: Set<String> = []
     private var inStyle = false
     private var styleText = ""
-    let allowed: Set<String> = ["svg", "g", "defs", "style", "rect", "circle", "ellipse", "line", "polyline", "polygon", "path", "text", "tspan", "title", "desc", "marker", "clipPath", "linearGradient", "radialGradient", "stop", "use"]
+    let allowed: Set<String> = ["svg", "g", "defs", "symbol", "style", "rect", "circle", "ellipse", "line", "polyline", "polygon", "path", "text", "tspan", "title", "desc", "marker", "clipPath", "linearGradient", "radialGradient", "stop", "use"]
     func parser(_ parser: XMLParser, didStartElement name: String, namespaceURI: String?, qualifiedName: String?, attributes: [String: String]) {
         if root == nil { root = name }
         if name == "style" { inStyle = true; styleText = "" }

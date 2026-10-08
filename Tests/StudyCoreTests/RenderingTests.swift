@@ -13,6 +13,14 @@ import PDFKit
         expectNoThrow(try VisualSafety.svg("<svg xmlns='http://www.w3.org/2000/svg'><defs><marker id='arrow'/></defs><path d='M0 0L1 1' style='marker-end:url(#arrow)'/></svg>"))
         expectThrows(try VisualSafety.svg("<svg xmlns='http://www.w3.org/2000/svg'><style><![CDATA[rect{fill:url(https://example.com/x)}]]></style></svg>"))
     }
+    @Test func testSVGAllowsLocalSequenceSymbolsButRejectsUnsafeContents() {
+        let prefix = "<svg xmlns='http://www.w3.org/2000/svg'><defs><symbol id='actor'>"
+        let suffix = "</symbol></defs><use href='#actor'/></svg>"
+        expectNoThrow(try VisualSafety.svg(prefix + "<path d='M0 0L1 1'/><text>Actor</text>" + suffix))
+        expectThrows(try VisualSafety.svg(prefix + "<script>alert(1)</script>" + suffix))
+        expectThrows(try VisualSafety.svg(prefix + "<use href='https://example.com/actor.svg'/>" + suffix))
+        expectThrows(try VisualSafety.svg(prefix + "<path onclick='alert(1)'/>" + suffix))
+    }
     @Test @MainActor func testStoredASCIIFallbackDoesNotCallAI() async throws {
         var lesson = DemoContent.lesson(); lesson.visuals[0].kind = "image_prompt"
         let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)

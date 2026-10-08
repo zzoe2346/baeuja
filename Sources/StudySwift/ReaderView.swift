@@ -80,9 +80,8 @@ struct ReaderView: View {
                         Image(nsImage: image).resizable().scaledToFit()
                             .frame(maxWidth: 740, maxHeight: 420).accessibilityLabel(definition.altText)
                     } else if visual.kind == "ascii" {
-                        Text(visual.content).font(.system(size: max(12, fontSize - 3), design: .monospaced))
-                            .fixedSize(horizontal: false, vertical: true).frame(maxWidth: .infinity, alignment: .leading)
-                            .padding(12).background(Color(nsColor: .controlBackgroundColor), in: RoundedRectangle(cornerRadius: 6))
+                        MonospacedBlock(text: visual.content, fontSize: max(12, fontSize - 3), padding: 12)
+                            .background(Color(nsColor: .controlBackgroundColor), in: RoundedRectangle(cornerRadius: 6))
                     } else {
                         Label("저장된 그림을 읽지 못했습니다. 더 보기 메뉴에서 원본 그림 재시도를 선택하세요.", systemImage: "photo.badge.exclamationmark")
                             .font(.callout).foregroundStyle(.secondary)
@@ -174,7 +173,14 @@ struct MarkdownView: View {
         VStack(alignment: .leading, spacing: 18) {
             ForEach(Array(LessonMarkdown.blocks(text).enumerated()), id: \.offset) { _, block in
                 switch block.kind {
-                case .code(let language): VStack(alignment: .leading, spacing: 10) { if !language.isEmpty { Text(language.uppercased()).font(.caption.weight(.semibold)).foregroundStyle(.secondary) }; Text(block.text).font(.system(size: max(13, fontSize - 3), design: .monospaced)).frame(maxWidth: .infinity, alignment: .leading) }.padding(18).background(Color.primary.opacity(0.055), in: RoundedRectangle(cornerRadius: 10))
+                case .code(let language):
+                    VStack(alignment: .leading, spacing: 10) {
+                        if !language.isEmpty {
+                            Text(language.uppercased()).font(.caption.weight(.semibold)).foregroundStyle(.secondary)
+                                .padding(.horizontal, 16).padding(.top, 16)
+                        }
+                        MonospacedBlock(text: block.text, fontSize: max(13, fontSize - 3), padding: 16)
+                    }.background(Color.primary.opacity(0.055), in: RoundedRectangle(cornerRadius: 10))
                 case .heading(let level): Text(LessonMarkdown.inline(block.text)).font(.system(size: fontSize + Double(max(0, 5 - level)), weight: .semibold))
                 case .bullet: HStack(alignment: .top, spacing: 12) { Text("•").foregroundStyle(Color.accentColor); Text(LessonMarkdown.inline(block.text)).frame(maxWidth: .infinity, alignment: .leading) }.font(.system(size: fontSize)).lineSpacing(7)
                 case .numbered(let number): HStack(alignment: .top, spacing: 12) { Text("\(number).").foregroundStyle(Color.accentColor); Text(LessonMarkdown.inline(block.text)).frame(maxWidth: .infinity, alignment: .leading) }.font(.system(size: fontSize)).lineSpacing(7)
@@ -194,6 +200,23 @@ struct MarkdownView: View {
                 }
             }
         }.frame(maxWidth: .infinity, alignment: .leading).fixedSize(horizontal: false, vertical: true)
+    }
+}
+
+private struct MonospacedBlock: View {
+    let text: String
+    let fontSize: Double
+    let padding: CGFloat
+
+    var body: some View {
+        ScrollView(.horizontal) {
+            Text(text).font(.system(size: fontSize, design: .monospaced))
+                .fixedSize(horizontal: true, vertical: true)
+                .padding(padding)
+        }
+        .fixedSize(horizontal: false, vertical: true)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .help("폭이 부족하면 가로로 스크롤해 전체 도식과 코드를 볼 수 있습니다.")
     }
 }
 

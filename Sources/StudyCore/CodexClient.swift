@@ -168,6 +168,7 @@ public struct CodexClient: Sendable {
         그림은 최소 1개: Mermaid 또는 안전한 SVG, 삽화가 필요하면 image_prompt. 비ASCII 그림은 같은 의미의 ASCII fallback을 마지막 후보에 반드시 사전 작성하세요.
         ASCII는 LF와 printable ASCII만, 탭 없이 줄당 최대72열입니다. 한글 설명은 caption/alt_text에 충분히 넣으세요.
         SVG에 script, foreignObject, 이벤트, 외부 참조를 넣지 마세요. Mermaid는 짧고 유효한 구문이며 HTML 라벨은 피하세요.
+        비교 그림은 사례 이름을 각 묶음에 명시하고, 본문·caption·alt_text에서는 그 이름으로 참조하세요. 렌더러가 바꿀 수 있는 왼쪽/오른쪽/위/아래 배치를 가정하지 마세요. 서로 연결되지 않은 큰 흐름은 여러 그림으로 나눠 글자가 작아지지 않게 하세요.
         퀴즈 2~3개, 정답과 해설, 근거 있는 심화 후보와 이유. 채점이나 통과 조건은 없습니다.
         가능하면 1차 공식 자료를 web search로 확인하고 실제 HTTP(S) 출처를 넣으세요. checked_at은 실제 확인한 경우만 날짜, 아니면 null.
         확인하지 못한 사실을 검증됐다고 주장하지 마세요. 원시 HTML과 원격 Markdown 이미지, 외부 앱/셸 사용은 금지입니다.

@@ -61,6 +61,19 @@ import StudyCore
             guard let id = state.selectedCourseId, let selected = state.courses.first(where: { $0.id == id }), selected.lessons["1"] != nil else { throw StudyError.invalid("재개할 QA 교재가 없습니다.") }
             print("저장 교재 재개 검증 완료 · AI 호출 없음")
         }
+        if args.contains("--verify-saved-visuals") {
+            guard let course = state.courses.first(where: { $0.id == state.selectedCourseId }), let record = course.lessons[String(course.currentPart)] else { throw StudyError.invalid("검증할 저장 교재가 없습니다.") }
+            let directory = root.appendingPathComponent("verified-visuals")
+            try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+            let renderer = VisualRenderer()
+            let visuals = try await renderer.render(record.lesson, directory: directory)
+            for visual in visuals { print("\(visual.id): \(visual.kind) · 대체 \(visual.fallbackReason != nil)") }
+            for diagnostic in renderer.diagnostics { print("렌더링 진단: " + diagnostic) }
+            guard zip(record.lesson.visuals, visuals).allSatisfy({ $0.kind == "ascii" || $1.fallbackReason == nil }) else {
+                throw StudyError.invalid("원본 그림 렌더링 실패를 대체 도식으로 처리했습니다.")
+            }
+            print("저장된 원본 시각자료 재검증 완료 · AI 호출·보관함 변경 없음")
+        }
         if args.contains("--export-saved") {
             guard let course = state.courses.first(where: { $0.id == state.selectedCourseId }), let record = course.lessons[String(course.currentPart)] else { throw StudyError.invalid("내보낼 저장 교재가 없습니다.") }
             try pdf(record: record, repository: repository, name: "saved-part")
