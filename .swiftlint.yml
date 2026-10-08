@@ -1,0 +1,16 @@
+# Formatting belongs to swift-format. Enable a small set of correctness rules.
+only_rules:
+  - duplicate_imports
+  - force_cast
+  - force_try
+  - unused_closure_parameter
+  - unused_optional_binding
+  - redundant_nil_coalescing
+  - contains_over_first_not_nil
+included:
+  - Sources
+  - Tests
+excluded:
+  - Sources/StudyCore/Resources
+force_cast: error
+force_try: error
