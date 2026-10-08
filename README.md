@@ -4,6 +4,8 @@
 
 기본 본문 **18pt**, **14~28pt 크기 조절**, 밝은·어두운·시스템 테마를 제공합니다. 과학·역사·언어 등 직접 입력한 주제를 공부할 수 있습니다. 생성에는 기존 ChatGPT 구독으로 로그인한 Codex CLI를 사용합니다.
 
+화면은 `NavigationSplitView`·네이티브 사이드바·툴바·Form·Picker·DisclosureGroup으로 구성했습니다. macOS 26 이상에서 페이지 이동과 주요 동작에 **실제 Liquid Glass API**를 사용하며, 이전 지원 OS에는 표준 버튼을 제공합니다. [Apple HIG 적용 기준](docs/design.md)을 문서로 남겼습니다.
+
 ![실제 앱의 교재 읽기 화면](docs/assets/lesson.png)
 
 ## 학습 흐름
@@ -18,7 +20,7 @@
 
 ## 실제 실행 화면
 
-교재 읽기·과정 초안·아래 그림은 실제 Codex 구독으로 생성한 달의 위상 주제입니다. 초안의 제목은 앱에서 직접 편집했습니다. 퀴즈와 어두운 테마는 앱에 포함된 고정 인덱스 샘플입니다. 합성한 UI 목업을 사용하지 않았습니다.
+교재 읽기·어두운 테마·그림은 실제 Codex 구독으로 생성한 달의 위상 주제입니다. 과정 편집 화면은 그 실제 계획을 QA 보관함에 초안으로 복사하고 앱에서 제목을 수정했습니다. 퀴즈는 앱에 포함된 고정 인덱스 샘플입니다. 디자인 검증에는 저장된 교재를 사용해 추가 AI 호출을 하지 않았습니다. 합성한 UI 목업을 사용하지 않았습니다.
 
 | 과정 초안 편집 | 퀴즈 메모와 선택 정답 공개 |
 |---|---|
@@ -26,11 +28,13 @@
 
 ![실제 생성 교재의 SVG 그림](docs/assets/diagram.png)
 
+![툴바에서 여는 글자 크기와 테마 설정](docs/assets/options.png)
+
 ![어두운 테마와 21pt 본문](docs/assets/dark.png)
 
 ## 빌드와 실행
 
-macOS 14 이상을 대상으로 하며 **Swift 6 도구**가 필요합니다. Xcode 또는 Command Line Tools로 빌드합니다. 실제 실행 검증 환경은 macOS 27.0.1, Apple Silicon, Swift 6.4입니다. 다른 macOS 버전과 Intel Mac 실행은 아직 확인하지 않았습니다.
+macOS 14 이상을 대상으로 하며 **Swift 6 도구와 macOS 26 이상 SDK**가 필요합니다. Xcode 또는 Command Line Tools로 빌드합니다. 실제 실행 검증 환경은 macOS 27.0.1, Apple Silicon, Swift 6.4입니다. 다른 macOS 버전과 Intel Mac 실행은 아직 확인하지 않았습니다.
 
 ```sh
 git clone https://github.com/zzoe2346/study-swift.git
@@ -68,7 +72,7 @@ Mermaid와 안전한 SVG는 앱 안의 로컬 WebKit에서 PNG로 렌더링합�
 
 PDF는 AppKit·CoreText·CoreGraphics로 생성합니다. 본문·예제·화면과 같은 선택 그림·퀴즈를 포함하고, **정답과 해설은 문제 이후의 새 페이지**에서 시작합니다.
 
-기존 교재의 `lesson.json`을 **교재 가져오기**로 열 수 있습니다. 파일을 검증하고 그림을 로컬로 준비하며 AI를 호출하지 않습니다. 생성 삽화가 필요하면 저장된 대체 후보를 사용합니다. 기존 SQLite 보관함 전체 자동 이전은 제공하지 않습니다.
+기존 교재의 `lesson.json`을 상단 **더 보기 → 교재 가져오기**로 열 수 있습니다. 파일을 검증하고 그림을 로컬로 준비하며 AI를 호출하지 않습니다. 생성 삽화가 필요하면 저장된 대체 후보를 사용합니다. 기존 SQLite 보관함 전체 자동 이전은 제공하지 않습니다.
 
 ## 단축키와 저장
 
@@ -78,6 +82,7 @@ PDF는 AppKit·CoreText·CoreGraphics로 생성합니다. 본문·예제·화면
 | 파트 PDF 내보내기 | ⌘P |
 | 본문 크게 / 작게 | ⌘+ / ⌘− |
 | 기본 18pt | ⌘0 |
+| 이전 / 다음 내용 | ⌘[ / ⌘] |
 | 앱 설정 | ⌘, |
 
 학습 데이터는 기본적으로 `~/Library/Application Support/StudySwift`의 `library.json`, `materials/`, `jobs/`에 저장합니다. `--data-dir`로 별도 폴더를 지정할 수 있습니다. 크기·테마·CLI 경로는 macOS 사용자 설정에 저장합니다. 인증 파일은 기존 Codex 위치를 사용하며 복사하지 않습니다.
@@ -102,6 +107,7 @@ swift run StudyQA --data-dir ./work/live-qa --reopen --export-saved
 
 - [요구사항](docs/requirements.md)
 - [상세설계](docs/lld.md)
+- [macOS 디자인 기준](docs/design.md)
 - [협업·Git 규칙](AGENTS.md)
 
 프로젝트 코드는 [MIT](LICENSE), 포함한 Mermaid 런타임은 [별도 MIT 고지](Sources/StudyCore/Resources/NOTICE.md)를 따릅니다.

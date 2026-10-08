@@ -11,7 +11,7 @@
 | 배포 최소 타깃 | macOS 14 |
 | 인증 / CLI | 기존 ChatGPT 구독 로그인, Codex CLI 0.160.1 |
 | 앱 | Release, 0.1.0, ad-hoc 서명 |
-| UI 캡처 | 실제 1280×850pt 창, 2560×1700 PNG |
+| 최신 UI 캡처 | 실제 1120×780pt 창, 2240×1560 PNG |
 
 최소 타깃 지정은 macOS 14·Intel Mac 실기기 검증을 의미하지 않는다. 개발자 인증서 서명·공증·App Store 배포는 수행하지 않았다.
 
@@ -73,15 +73,34 @@
 
 한글 표시, 긴 코드 줄바꿈과 페이지 나눔, ASCII 고정폭, 표 셀 줄바꿈과 이어지는 페이지의 헤더, 그림과 캡션, 출처, 문제 이후의 정답 페이지를 확인했다. 검토 중 발견한 내용 제목의 페이지 끝 고립과 그림 캡션 분리를 수정한 뒤 최종 문서로 재확인했다.
 
+## 네이티브 디자인 개선 검증
+
+2026-10-08. 사용자 제공 스킬과 현재 Apple HIG를 확인하고 네이티브 두 열 탐색·편집 및 macOS 26+ Liquid Glass를 적용했다. 기존 저장 교재를 복사한 별도 디자인 QA 보관함을 사용했다. 기존 보관함과 사용자가 추가한 과정은 덮어쓰지 않았고 추가 AI 호출을 하지 않았다.
+
+| 변경 영역 | 실제 실행에서 확인한 결과 |
+|---|---|
+| 탐색·경계 | 과정/목차 List 선택, native 검색, 사이드바 숨김/표시. 툴바 배경을 숨긴 후 상단과 본문의 세로 경계가 이어짐. 1120pt 창과861pt 좁은 창에서 재확인 |
+| Liquid Glass | 실제 macOS 27에서 regular glassEffect 페이지 위치와 glass/glassProminent 이동·완료 버튼 표시, 이전/다음 동작. 본문과 그림은 일반 내용 층 유지 |
+| 크기·테마 | 읽기 popover Slider18→21, 어둡게/밝게, ⌘0 복원. 28pt 상한·좁은 창의 줄바꿈과 스크롤 확인. 설정 값은 재실행 후 유지 |
+| 그림과 viewport | SVG 그림·캡션·출처 표시와 내용 전환. 검증 중 그림 탭의 크기 계산 반복을 발견해 representable의 sizeThatFits를 viewport 제안으로 고정. 수정 후 재실행·그림→텍스트→그림·창 크기 변경·숨김/표시·스크롤 정상 |
+| 계획 | 실제 계획의 QA 초안 사본에서 제목 입력·저장, 시간 Stepper30↔31, 파트 추가/삭제. 제목·목표·범위·파트 목표의 접근성 이름 확인 |
+| 퀴즈 | 네이티브 메모와 DisclosureGroup 선택 공개, 재실행 후 메모와 공개 상태 복원. 완료 샘플의 복습 완료 sheet와 완료 상태 유지 |
+| 시작 화면 | 격리된 빈 보관함에서 중앙 ContentUnavailableView와 새 과정/샘플 버튼 확인. ⌘N sheet의 빈 입력에서는 생성 버튼 비활성화, Escape로 복원 |
+| 단축키 | ⌘[ / ⌘] 내용 전환. ⌘N의 별도 창 생성 충돌을 단일 Window와 replacing 명령으로 수정해 새 과정 sheet 열림·Escape 닫힘 확인 |
+| PDF | 새 UI의 ⌘P → native 저장 대화상자 → 실제 달 교재7페이지 PDF 저장. PDF 생성 코어와 문제/정답 계약은 변경 없음 |
+
+이 개선에서도37개 자동 테스트가 모두 통과했고 최종 Release 빌드가 성공했다. macOS 14~25의 fallback은 availability 분기와 최소 타깃 빌드로 확인했으며 해당 OS 실기기 실행은 수행하지 않았다. 현재 Apple 문서와 코드의 대응은 [디자인 기준](design.md)에 기록했다.
+
 ## 스크린샷 출처
 
 | 파일 | 실제 화면 |
 |---|---|
 | [lesson.png](assets/lesson.png) | 실제 달의 위상 교재, Release, 밝은 테마 18pt |
-| [plan.png](assets/plan.png) | 실제 달의 위상 계획 생성 후 앱에서 제목 편집 |
+| [plan.png](assets/plan.png) | 실제 달의 위상 계획의 QA 초안 사본을 앱에서 제목 편집 |
 | [diagram.png](assets/diagram.png) | 실제 달 교재의 SVG를 PNG로 표시, Release |
 | [quiz.png](assets/quiz.png) | 고정 인덱스 샘플, 메모·정답 공개 |
-| [dark.png](assets/dark.png) | 고정 인덱스 샘플, 어두운 테마 21pt |
+| [options.png](assets/options.png) | 실제 달 교재의 네이티브 읽기 설정 popover,18pt 밝은 테마 |
+| [dark.png](assets/dark.png) | 실제 달의 위상 교재, 어두운 테마 21pt |
 
 합성한 UI나 텍스트를 덧씌운 화면을 사용하지 않았다. 생성 교재·작업 로그·메모·인증 파일은 Git에 넣지 않으며 공개 스크린샷은 이 QA용 학습 주제와 샘플만 포함한다.
 
