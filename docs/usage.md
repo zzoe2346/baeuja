@@ -17,7 +17,7 @@ codex login
 codex login status
 ```
 
-앱은 `Logged in using ChatGPT` 인증을 확인합니다. 실행 파일을 찾지 못하면 **Study Swift → Settings… → Codex 실행 파일**에 경로를 입력하세요. CLI 0.160.1에서 실제 생성을 확인했습니다. 이후 CLI 변경에 따른 차이는 [호환성 절차](compatibility.md)를 따릅니다.
+앱은 `Logged in using ChatGPT` 인증을 확인합니다. 실행 파일을 찾지 못하면 **배우자 → Settings… → Codex 실행 파일**에 경로를 입력하세요. CLI 0.160.1에서 실제 생성을 확인했습니다. 이후 CLI 변경에 따른 차이는 [호환성 절차](compatibility.md)를 따릅니다.
 
 생성에는 구독 한도가 적용되며 API 키나 별도 유료 API로 전환하지 않습니다. 생성 취소, 시간 제한 또는 실패가 발생하면 기존 교재를 유지합니다.
 
@@ -42,10 +42,10 @@ codex login status
 
 ## 저장 위치
 
-학습 데이터는 `~/Library/Application Support/StudySwift`의 `library.json`, `materials/`, `jobs/`에 저장합니다. `--data-dir`로 별도 폴더를 지정할 수 있습니다. 글자 크기와 테마, CLI 경로는 macOS 사용자 설정에 저장합니다. Codex 인증 파일은 기존 위치를 사용하며 앱이 복사하지 않습니다.
+학습 데이터는 `~/Library/Application Support/StudySwift`의 `library.json`, `materials/`, `jobs/`에 저장합니다. `--data-dir`로 별도 폴더를 지정할 수 있습니다. 앱 이름을 바꾼 뒤에도 기존 교재를 그대로 읽도록 이 폴더를 유지합니다. 글자 크기와 테마, CLI 경로는 기존 bundle identifier `com.zzoe.study-swift`의 macOS 사용자 설정에 저장합니다. Codex 인증 파일은 기존 위치를 사용하며 앱이 복사하지 않습니다.
 
 샘플을 별도 보관함에서 실행하려면 다음 명령을 사용합니다. 샘플은 AI를 호출하지 않습니다.
 
 ```sh
-swift run StudySwift --demo --data-dir ./data/demo
+swift run Baeuja --demo --data-dir ./data/demo
 ```

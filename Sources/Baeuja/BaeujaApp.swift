@@ -1,7 +1,7 @@
 import SwiftUI
 import StudyCore
 
-@main struct StudySwiftApp: App {
+@main struct BaeujaApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) var delegate
     @StateObject private var store: StudyStore
     @AppStorage("readerFontSize") private var fontSize = ReaderTypography.defaultSize
@@ -14,12 +14,12 @@ import StudyCore
         } else {
             root = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[
                 0
-            ].appendingPathComponent("StudySwift")
+            ].appendingPathComponent("StudySwift")  // Preserve the existing library location.
         }
         _store = StateObject(wrappedValue: StudyStore(root: root))
     }
     var body: some Scene {
-        Window("Study Swift", id: "study") {
+        Window(AppName.display, id: "study") {
             LibraryView(store: store)
                 .preferredColorScheme(
                     appearance == "system" ? nil : appearance == "dark" ? .dark : .light
@@ -61,7 +61,7 @@ import StudyCore
             CommandGroup(replacing: .help) {
                 Button("사용 안내") {
                     NSWorkspace.shared.open(
-                        URL(string: "https://github.com/zzoe2346/study-swift#readme")!)
+                        URL(string: "https://github.com/zzoe2346/baeuja#readme")!)
                 }
             }
         }

@@ -40,17 +40,17 @@ let buildOptions = [
     "-Xlinker", minimumVersion, "-Xlinker", sdkVersion,
 ]
 if !CommandLine.arguments.contains("--no-build") {
-    try run("/usr/bin/env", ["swift", "build"] + buildOptions + ["--product", "StudySwift"])
+    try run("/usr/bin/env", ["swift", "build"] + buildOptions + ["--product", "Baeuja"])
 }
 let path = try output("/usr/bin/env", ["swift", "build"] + buildOptions + ["--show-bin-path"])
 let build = URL(fileURLWithPath: path)
 let loadCommands = try output(
-    "/usr/bin/otool", ["-l", build.appendingPathComponent("StudySwift").path])
+    "/usr/bin/otool", ["-l", build.appendingPathComponent("Baeuja").path])
 let sdkPattern = #"\bsdk\s+"# + NSRegularExpression.escapedPattern(for: sdkVersion) + #"(?:\s|$)"#
 guard loadCommands.range(of: sdkPattern, options: .regularExpression) != nil else {
     fatalError("실행 파일의 SDK가 현재 SDK와 다릅니다. --no-build 없이 다시 빌드하세요.")
 }
-let bundle = root.appendingPathComponent("dist/Study Swift.app")
+let bundle = root.appendingPathComponent("dist/배우자.app")
 let contents = bundle.appendingPathComponent("Contents"),
     macOS = contents.appendingPathComponent("MacOS"),
     resources = contents.appendingPathComponent("Resources")
@@ -58,15 +58,22 @@ if manager.fileExists(atPath: bundle.path) { try manager.removeItem(at: bundle) 
 try manager.createDirectory(at: macOS, withIntermediateDirectories: true)
 try manager.createDirectory(at: resources, withIntermediateDirectories: true)
 try manager.copyItem(
-    at: build.appendingPathComponent("StudySwift"), to: macOS.appendingPathComponent("StudySwift"))
+    at: build.appendingPathComponent("Baeuja"), to: macOS.appendingPathComponent("Baeuja"))
 for item in try manager.contentsOfDirectory(at: build, includingPropertiesForKeys: nil)
-where item.pathExtension == "bundle" {
+where item.pathExtension == "bundle" && item.lastPathComponent.hasPrefix("Baeuja_") {
     try manager.copyItem(at: item, to: resources.appendingPathComponent(item.lastPathComponent))
 }
+for language in ["ko", "en"] {
+    let localization = root.appendingPathComponent("AppResources/" + language + ".lproj")
+    try manager.copyItem(
+        at: localization, to: resources.appendingPathComponent(language + ".lproj"))
+}
 var info: [String: Any] = [
-    "CFBundleName": "Study Swift", "CFBundleDisplayName": "Study Swift",
-    "CFBundleIdentifier": "com.zzoe.study-swift", "CFBundleExecutable": "StudySwift",
-    "CFBundlePackageType": "APPL", "CFBundleShortVersionString": "0.1.0", "CFBundleVersion": "2",
+    "CFBundleName": "배우자", "CFBundleDisplayName": "배우자",
+    "CFBundleDevelopmentRegion": "ko", "CFBundleLocalizations": ["ko", "en"],
+    // Keep the installed app identity so existing preferences remain available.
+    "CFBundleIdentifier": "com.zzoe.study-swift", "CFBundleExecutable": "Baeuja",
+    "CFBundlePackageType": "APPL", "CFBundleShortVersionString": "0.1.0", "CFBundleVersion": "3",
     "LSMinimumSystemVersion": minimumVersion, "DTSDKName": "macosx" + sdkVersion,
     "NSHighResolutionCapable": true, "NSPrincipalClass": "NSApplication",
 ]

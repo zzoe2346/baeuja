@@ -7,7 +7,7 @@ destination="$PWD/.tools/swiftlint/$version"
 if [[ -x "$destination/swiftlint" ]] && [[ "$("$destination/swiftlint" version)" == "$version" ]]; then
     exit 0
 fi
-archive=$(mktemp -t study-swiftlint)
+archive=$(mktemp -t baeuja-swiftlint)
 trap 'rm -f "$archive"' EXIT
 curl --fail --location --silent --show-error \
     "https://github.com/realm/SwiftLint/releases/download/$version/portable_swiftlint.zip" \

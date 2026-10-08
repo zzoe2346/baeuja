@@ -7,7 +7,7 @@
 - 화면 디자인은 [docs/design.md](docs/design.md)를 따른다. 해당 영역의 현재 Apple HIG와 네이티브 API를 확인하고 실제 실행 화면에서 검증한다.
 - 구현 구조와 데이터 계약은 [docs/lld.md](docs/lld.md)를 참조하고, 설계가 바뀌면 함께 갱신한다.
 - 자동 검사, 실제 화면, 생성과 성능의 완료 조건은 [docs/quality.md](docs/quality.md), OS와 SDK 변경은 [docs/compatibility.md](docs/compatibility.md)를 따른다.
-- 앱과 저장소 이름 변경은 보류 중이다. 이름, bundle identifier와 저장 경로를 임의로 바꾸지 않는다.
+- 앱 이름은 배우자, 영문 표기는 Let’s Learn, 저장소와 SPM 패키지는 각각 `baeuja`, `Baeuja`다. 사용자가 승인한 이름으로 화면과 문서를 통일한다. 기존 설정과 교재를 이어 쓰도록 bundle identifier `com.zzoe.study-swift`와 저장 경로 `StudySwift`는 호환성 식별자로 유지한다. 이를 바꿀 때는 별도 이전 설계와 검증이 필요하다.
 
 ## 작업 방식
 

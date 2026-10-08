@@ -6,7 +6,7 @@
 
 ## 책임과 의존성 경계
 
-- `StudySwift/Features`: Library, Planning, Reader 화면. 사용자의 입력·표시를 담당한다. Reader의 Markdown과 AppKit 스크롤 bridge는 별도 파일이다.
+- `Baeuja/Features`: Library, Planning, Reader 화면. 사용자의 입력·표시를 담당한다. Reader의 Markdown과 AppKit 스크롤 bridge는 별도 파일이다.
 - `StudyStore`: 메인 액터의 UI 상태와 사용자 명령 연결, 성공한 보관함 사본의 채택, 생성 job·취소와 스크롤 저장 lifecycle을 소유한다. 직접 렌더링·자료 파일 준비를 반복하지 않고 `LessonPreparation`에 위임한다.
 - `StudyCore/Domain`: Foundation 기반 Codable 값·검증·Markdown 파싱·고정 샘플. UI·CLI·파일 저장을 실행하지 않는다. framework import 제한은 project-check가 확인하지만 별도 타깃의 컴파일 경계는 아직 아니다.
 - `StudyCore/Application`: `LessonPreparation`. 검증 → 새 자료 디렉터리 → 렌더링 → JSON 원자적 쓰기 → 취소 검사 → 채택 순서. 실패·취소·채택 거부 시 준비한 디렉터리를 삭제한다. UI 상태를 소유하지 않는다.
@@ -16,7 +16,7 @@ Domain은 상위 계층을 참조하지 않고, UI는 Application/Infrastructure
 
 ## 구성
 
-`StudySwift`는 SwiftUI 화면과 메인 액터의 `StudyStore`를 소유한다. `StudyCore`는 Codable 모델·검증, 원자적 보관함, Codex CLI, 시각자료와 PDF를 제공한다. `PackageApp`은 Swift 빌드 결과를 `.app`으로 묶는다. `RunTests`는 Swift Testing의 도구 환경을 준비하고, `StudyQA`는 격리된 로컬/실제 구독 QA를 실행한다. Python·별도 HTTP 서버·외부 패키지 의존성은 없다.
+`Baeuja`는 SwiftUI 화면과 메인 액터의 `StudyStore`를 소유한다. `StudyCore`는 Codable 모델·검증, 원자적 보관함, Codex CLI, 시각자료와 PDF를 제공한다. `PackageApp`은 Swift 빌드 결과를 `.app`으로 묶는다. `RunTests`는 Swift Testing의 도구 환경을 준비하고, `StudyQA`는 격리된 로컬/실제 구독 QA를 실행한다. Python·별도 HTTP 서버·외부 패키지 의존성은 없다.
 
 ```text
 SwiftUI / AppKit
@@ -33,7 +33,7 @@ SwiftUI / AppKit
 - `Plan`과 `Lesson`은 기존 버전 1 JSON 필드명을 유지한다. Codable snake_case 변환과 추가 의미 검증을 사용한다.
 - 과정 상태는 draft/active/complete다. 계획은 시작 이후 고정한다. 파트 완료는 명시적인 다음 선택으로만 설정한다. 미완료 파트를 먼저 찾아 이동한다.
 - `LibraryState`는 과정·파트별 `PartProgress`, 검증된 `LessonRecord`, 선택 과정을 저장한다. 진도에는 현재 내용·스크롤 오프셋·퀴즈 메모·공개 ID가 있다.
-- 기본 폴더는 `~/Library/Application Support/StudySwift`다. `--data-dir`로 QA/데모를 격리한다. 자료와 생성 작업은 각각 `materials/<UUID>`, `jobs/<UUID>`다.
+- 기본 폴더는 `~/Library/Application Support/StudySwift`다. 제품 이름은 배우자지만 이 경로와 `com.zzoe.study-swift` bundle identifier는 기존 교재와 설정을 유지하기 위한 호환성 계약이다. `--data-dir`로 QA/데모를 격리한다. 자료와 생성 작업은 각각 `materials/<UUID>`, `jobs/<UUID>`다.
 - 변경은 사본을 만들고 원자적 쓰기가 성공한 뒤 UI 상태로 채택한다. 읽을 수 없는 기존 보관함은 덮어쓰지 않고 저장을 중지한다. 자료 폴더 준비 실패도 오류 화면을 표시하고 저장·AI 생성을 중지한다.
 - 교재 재생성은 새 자료 폴더에서 검증·렌더링이 모두 끝난 뒤 참조를 교체한다. 실패·취소 시 이전 자료·진도를 유지한다.
 - 자산 경로는 보관함 내부인지 확인한다. 생성 파일의 심볼릭 링크·크기·PNG 디코딩/픽셀 수를 검사한다.

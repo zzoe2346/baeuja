@@ -8,6 +8,12 @@ Swift Package Manager로 빌드하는 Swift 전용 macOS 앱입니다. SwiftUI�
 
 빌드에는 Swift 6 도구와 macOS 26 이상 SDK가 필요합니다. Xcode 또는 Command Line Tools를 사용할 수 있습니다. 아이콘 원본을 다시 컴파일할 때는 아래 아이콘 갱신 안내에 따라 Xcode를 선택합니다.
 
+## 앱 이름과 호환성
+
+SPM 패키지와 실행 타깃은 `Baeuja`, 배포 번들은 `dist/배우자.app`입니다. `AppResources/ko.lproj`와 `en.lproj`의 `InfoPlist.strings`로 한국어 **배우자**, 영어 **Let’s Learn**을 표시합니다.
+
+기존 사용자의 교재와 환경설정을 이어 쓰기 위해 bundle identifier와 저장 경로는 유지합니다. 이전 이름이 들어간 이 두 호환성 식별자를 일괄 문자열 치환하면 기존 보관함이나 설정을 찾지 못할 수 있습니다. 이름 변경 결정은 [002: 배우자 이름과 기존 데이터 호환](decisions/002-product-name.md)에 정리했습니다.
+
 ## 공통 검사
 
 ```sh

@@ -124,7 +124,7 @@ struct LibraryView: View {
                     .clipped()
             }.background(.background)
         }
-        .navigationTitle(store.selected?.plan.title ?? "Study Swift")
+        .navigationTitle(store.selected?.plan.title ?? AppName.display)
         .searchable(text: $search, placement: .sidebar, prompt: "보관함 검색")
         .toolbar {
             ToolbarItem(placement: .primaryAction) {

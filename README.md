@@ -2,7 +2,7 @@
   <img src="Artwork/AppIcon/Preview/AppIcon-default.png" width="128" alt="노란 배경에서 머리띠를 매고 책을 읽는 캐릭터">
 </p>
 
-<h1 align="center">Study</h1>
+<h1 align="center">배우자 — Let’s Learn</h1>
 
 배우고 싶은 주제로 **교재와 시각자료를 만들고, 퀴즈로 복습하는 macOS 학습 앱**입니다. 과학, 역사, 언어처럼 관심 있는 주제를 직접 입력해 시작할 수 있습니다.
 
@@ -29,10 +29,10 @@
 빌드 환경과 도구 설정은 [개발 안내](docs/development.md#빌드-환경)를 참고하세요.
 
 ```sh
-git clone https://github.com/zzoe2346/study-swift.git
-cd study-swift
+git clone https://github.com/zzoe2346/baeuja.git
+cd baeuja
 swift run PackageApp --release
-open "dist/Study Swift.app"
+open "dist/배우자.app"
 ```
 
 macOS 14 이상을 대상으로 합니다. 현재 실행을 확인한 환경은 macOS 27.0.1의 Apple Silicon Mac이며, 다른 OS와 Intel Mac은 아직 확인하지 않았습니다. 로컬 빌드는 ad-hoc 서명을 사용하며 공증된 배포본은 아닙니다. 자세한 지원 범위는 [호환성 안내](docs/compatibility.md)를 참고하세요.

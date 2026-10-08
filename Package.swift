@@ -2,17 +2,17 @@
 import PackageDescription
 
 let package = Package(
-    name: "StudySwift",
+    name: "Baeuja",
     platforms: [.macOS(.v14)],
     products: [
-        .executable(name: "StudySwift", targets: ["StudySwift"]),
+        .executable(name: "Baeuja", targets: ["Baeuja"]),
         .executable(name: "PackageApp", targets: ["PackageApp"]),
         .executable(name: "StudyQA", targets: ["StudyQA"]),
         .executable(name: "RunTests", targets: ["RunTests"]),
     ],
     targets: [
         .target(name: "StudyCore", resources: [.copy("Resources")]),
-        .executableTarget(name: "StudySwift", dependencies: ["StudyCore"]),
+        .executableTarget(name: "Baeuja", dependencies: ["StudyCore"]),
         .executableTarget(name: "PackageApp"),
         .executableTarget(name: "StudyQA", dependencies: ["StudyCore"]),
         .executableTarget(name: "RunTests"),

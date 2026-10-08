@@ -6,7 +6,7 @@ import Foundation
     var root: URL!
     init() throws {
         root = FileManager.default.temporaryDirectory.appendingPathComponent(
-            "study-swift-test-" + UUID().uuidString);
+            "baeuja-test-" + UUID().uuidString);
         try FileManager.default.createDirectory(at: root, withIntermediateDirectories: true)
     }
     deinit { try? FileManager.default.removeItem(at: root) }
