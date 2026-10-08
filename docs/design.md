@@ -2,6 +2,8 @@
 
 2026-10-08 사용자 요청에 따라 Apple의 현재 HIG와 Liquid Glass 문서를 확인하고 SwiftUI 네이티브 화면을 개선했다. 제품 계약은 [요구사항](requirements.md), 실제 검증 범위는 [QA](qa.md)를 따른다.
 
+향후 변경의 검토 방법·완료 조건은 [품질 기준](quality.md), 새로운 OS·SDK 대응은 [호환성 절차](compatibility.md)를 따른다. 아래 표는 현재 구현 결정이며, 다음 OS에서도 같은 모양을 강제하는 영구 규칙이 아니다. 해당 영역의 공식 지침과 실제 앱의 가독성·사용성을 다시 검토한다.
+
 ## 근거
 
 - [Designing for macOS](https://developer.apple.com/design/human-interface-guidelines/designing-for-macos): 창 크기 변경·메뉴·키보드·개인화.

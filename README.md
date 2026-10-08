@@ -20,6 +20,8 @@
 
 ## 실제 실행 화면
 
+캡처 기준: **2026-10-08 · 앱 0.1.0 · macOS 27.0.1 · SDK 27.0**. 이번 유지보수 구조·자동 검사 변경은 화면 디자인을 바꾸지 않아 캡처를 유지했습니다. 출처·크기·테마·해시와 당시 배포 기록의 대응 범위는 [스크린샷 기록](docs/assets/screenshots.json)에 있습니다.
+
 교재 읽기·어두운 테마·그림은 실제 Codex 구독으로 생성한 달의 위상 주제입니다. 과정 편집 화면은 그 실제 계획을 QA 보관함에 초안으로 복사하고 앱에서 제목을 수정했습니다. 퀴즈는 이번에 앱에서 실제 생성한 트랜잭션 아웃박스 교재입니다. 계획·교재 생성에 두 번의 AI 작업을 사용했고 이후 그림 재시도·재개·PDF 검증은 AI 호출 없이 진행했습니다. 모든 캡처는 최신 SDK로 패키징한 실제 네이티브 앱 화면입니다.
 
 | 과정 초안 편집 | 퀴즈 메모와 선택 정답 공개 |
@@ -89,6 +91,15 @@ PDF는 AppKit·CoreText·CoreGraphics로 생성합니다. 본문·예제·화면
 
 ## 개발과 QA
 
+AI 에이전트와 개발자는 [협업 지침](AGENTS.md)에서 시작합니다. [품질 기준](docs/quality.md)은 공식 디자인 확인·실제 생성·성능 측정의 완료 조건을, [호환성 절차](docs/compatibility.md)는 다음 OS·SDK 업데이트 방법을 정의합니다.
+
+```sh
+./scripts/format.sh
+./scripts/check.sh
+```
+
+`check.sh`는 포맷·고정 버전 SwiftLint·구조·문서 링크·스크린샷 기록·테스트·Release 앱을 검증합니다. 첫 실행에서 공식 SwiftLint 배포 파일을 SHA-256 확인 후 `.tools/`에 받습니다. GitHub Actions도 같은 명령과 고정 샘플의 로컬 그림·PDF QA를 실행하며 실제 AI 호출은 하지 않습니다. 자동 검사 합격은 실제 화면·학습 내용·성능 QA의 대체가 아닙니다.
+
 ```sh
 swift run RunTests
 swift run StudyQA --data-dir ./work/local-qa --render-demo --stress-pdf --reopen
@@ -108,6 +119,9 @@ swift run StudyQA --data-dir ./work/live-qa --verify-saved-visuals
 
 - [요구사항](docs/requirements.md)
 - [상세설계](docs/lld.md)
+- [개발·검토 기준](docs/quality.md)
+- [OS·SDK 호환성](docs/compatibility.md)
+- [유지보수 구조 결정](docs/decisions/001-maintenance.md)
 - [macOS 디자인 기준](docs/design.md)
 - [추가 스킬·툴바 디자인 검토](docs/design-review.md)
 - [협업·Git 규칙](AGENTS.md)

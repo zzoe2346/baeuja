@@ -1,0 +1,93 @@
+{
+  "schemaVersion": 1,
+  "captureDate": "2026-10-08",
+  "appVersion": "0.1.0",
+  "sourceRevision": "375eabe25b15b08ba7d14850d3d6cb414f9eef8c",
+  "executableSHA256": "7509027f512601dcae6bc17f126dcd58b26155bc19629e3330c9d8ac6e19a967",
+  "runtimeOS": "macOS 27.0.1 arm64",
+  "sdk": "macOS 27.0",
+  "swift": "6.4",
+  "provenance": "기존 QA 기록과 배포 build-info의 revision·바이너리 기록을 연결했다. 캡처 당시 별도 manifest가 없어 프레임별 바이너리 대응을 다시 입증한 것은 아니다. 이번 내부 구조·검사 정리는 화면을 바꾸지 않으므로 캡처를 유지한다.",
+  "files": [
+    {
+      "file": "lesson.png",
+      "sha256": "806db292f71776366515686623116645a79344610035c149ad5aa03735636781",
+      "origin": "실제 생성 달 교재",
+      "theme": "light",
+      "fontSize": 18,
+      "windowWidthPoints": 1120,
+      "pixelWidth": 2240,
+      "pixelHeight": 1562
+    },
+    {
+      "file": "plan.png",
+      "sha256": "0045cda473216b1079ec6af1ed1c307033d4f9d98f5b97a2d747dff2b34f8461",
+      "origin": "실제 달 계획의 QA 초안 사본·제목 수정",
+      "theme": "light",
+      "fontSize": 18,
+      "windowWidthPoints": 1120,
+      "pixelWidth": 2240,
+      "pixelHeight": 1562
+    },
+    {
+      "file": "quiz.png",
+      "sha256": "a3be9bd7647e33608e3266f5e7cd4c7706178cb8c0d2752e649c19d7ddad851c",
+      "origin": "실제 생성 아웃박스 교재·QA 메모와 공개 정답",
+      "theme": "light",
+      "fontSize": 18,
+      "windowWidthPoints": 1120,
+      "pixelWidth": 2240,
+      "pixelHeight": 1562
+    },
+    {
+      "file": "diagram.png",
+      "sha256": "0ce87f3bf90450e9de24f335e5529c73aa968fc5ffbe044fff28cab7608a356e",
+      "origin": "실제 달 교재의 SVG 원본을 로컬 PNG로 렌더링",
+      "theme": "light",
+      "fontSize": 18,
+      "windowWidthPoints": 1120,
+      "pixelWidth": 2240,
+      "pixelHeight": 1562
+    },
+    {
+      "file": "options.png",
+      "sha256": "f809f45245ca007e168edba2aa288869b6bcd552962022a776c4b368c548fe6f",
+      "origin": "실제 달 교재의 네이티브 읽기 설정",
+      "theme": "light",
+      "fontSize": 18,
+      "windowWidthPoints": 1120,
+      "pixelWidth": 2240,
+      "pixelHeight": 1562
+    },
+    {
+      "file": "dark.png",
+      "sha256": "67301469394ca15745fe03465140805f382cb86e85637270f74e004916d06615",
+      "origin": "실제 생성 달 교재",
+      "theme": "dark",
+      "fontSize": 21,
+      "windowWidthPoints": 1120,
+      "pixelWidth": 2240,
+      "pixelHeight": 1562
+    },
+    {
+      "file": "compact.png",
+      "sha256": "17f65f669dced598aa3301dbb7e20b8fca4f6fd44a340c874b8074008b175070",
+      "origin": "QA 보관함·좁은 창의 실제 네이티브 툴바",
+      "theme": "light",
+      "fontSize": 18,
+      "windowWidthPoints": 861,
+      "pixelWidth": 1722,
+      "pixelHeight": 1732
+    },
+    {
+      "file": "ascii-large.png",
+      "sha256": "40d3fa09c17d99647a6bd2fe4ce5c358e80cdff72c0ec933e6cc19b7d02e2712",
+      "origin": "실제 생성 아웃박스의 저장 ASCII 대체 도식",
+      "theme": "light",
+      "fontSize": 36,
+      "windowWidthPoints": 861,
+      "pixelWidth": 1722,
+      "pixelHeight": 1732
+    }
+  ]
+}
