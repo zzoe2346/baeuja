@@ -57,7 +57,7 @@ CLI 경로 설정, 단축키, 그림 복구와 저장 위치는 [사용 안내](
 ./scripts/check.sh
 ```
 
-소스 구조와 검사 방법은 [개발 안내](docs/development.md)를, 기여 규칙은 [AGENTS.md](AGENTS.md)를 참고하세요. 프로젝트는 [Study TUI](https://github.com/zzoe2346/study-tui)의 학습 흐름을 이어받았습니다.
+소스 구조와 검사 방법은 [개발 안내](docs/development.md)를, 공통 기여 규칙은 [AGENTS.md](AGENTS.md)를 참고하세요. Codex, Claude 등 개발 도구별 연결은 [에이전트 운영 안내](docs/agent-workflow.md)에 있습니다. 프로젝트는 [Study TUI](https://github.com/zzoe2346/study-tui)의 학습 흐름을 이어받았습니다.
 
 ## 라이선스
 

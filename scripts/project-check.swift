@@ -35,15 +35,19 @@ if let files = manager.enumerator(at: domain, includingPropertiesForKeys: nil) {
             "Domain의 허용되지 않은 import: \(file.lastPathComponent)")
     }
 }
-var documents = [
-    root.appendingPathComponent("README.md"), root.appendingPathComponent("AGENTS.md"),
-]
-if let files = manager.enumerator(
-    at: root.appendingPathComponent("docs"), includingPropertiesForKeys: nil)
-{
-    for case let file as URL in files where file.pathExtension == "md" { documents.append(file) }
+var documents = try manager.contentsOfDirectory(at: root, includingPropertiesForKeys: nil)
+    .filter { $0.pathExtension == "md" }
+for directory in ["docs", ".github"] {
+    if let files = manager.enumerator(
+        at: root.appendingPathComponent(directory), includingPropertiesForKeys: nil)
+    {
+        for case let file as URL in files where file.pathExtension == "md" {
+            documents.append(file)
+        }
+    }
 }
 let links = try NSRegularExpression(pattern: #"\]\(([^\s)]+)(?:\s+\"[^\"]*\")?\)"#)
+let imports = try NSRegularExpression(pattern: #"(?m)^@([^\s]+)[ \t]*$"#)
 for file in documents {
     let source = try String(contentsOf: file, encoding: .utf8)
     let matches = links.matches(in: source, range: NSRange(source.startIndex..., in: source))
@@ -57,6 +61,21 @@ for file in documents {
             manager.fileExists(
                 atPath: file.deletingLastPathComponent().appendingPathComponent(path).path),
             "문서 링크 누락: \(file.lastPathComponent) → \(link)")
+    }
+    if ["CLAUDE.md", "GEMINI.md"].contains(file.lastPathComponent) {
+        for match in imports.matches(in: source, range: NSRange(source.startIndex..., in: source)) {
+            guard let range = Range(match.range(at: 1), in: source) else { continue }
+            let path = String(source[range])
+            let target = file.deletingLastPathComponent().appendingPathComponent(path)
+                .standardizedFileURL.resolvingSymlinksInPath()
+            check(
+                !path.hasPrefix("/") && !path.hasPrefix("~")
+                    && target.path.hasPrefix(root.resolvingSymlinksInPath().path + "/"),
+                "저장소 밖의 지침 import: \(file.lastPathComponent) → \(path)")
+            check(
+                manager.fileExists(atPath: target.path),
+                "지침 import 누락: \(file.lastPathComponent) → \(path)")
+        }
     }
 }
 let assets = root.appendingPathComponent("docs/assets")

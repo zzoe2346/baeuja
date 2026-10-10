@@ -25,6 +25,10 @@ SPM 패키지와 실행 타깃은 `Baeuja`, 배포 번들은 `dist/배우자.app
 
 GitHub Actions도 같은 명령과 고정 샘플 QA를 실행합니다. 자동 검사에는 실제 AI 호출이 포함되지 않으며, 합격만으로 학습 내용의 정확성이나 화면 품질, 체감 성능을 보증하지 않습니다.
 
+## AI 에이전트로 개발하기
+
+개발 지침은 도구와 관계없이 [AGENTS.md](../AGENTS.md)를 기준으로 합니다. Claude Code와 Gemini CLI의 진입 파일은 이 지침을 import하고, Cursor와 Copilot의 연결 방식은 [에이전트 운영 안내](agent-workflow.md)에 정리했습니다. 도구를 바꿀 때 지침 로딩과 현재 Git 상태를 확인하세요. 앱의 교재 생성에 사용하는 Codex CLI와 개발 에이전트 선택은 별개입니다.
+
 ## 교재 QA
 
 ```sh
@@ -47,6 +51,7 @@ swift run StudyQA --data-dir ./work/live-qa --verify-saved-visuals
 ## 프로젝트 문서
 
 - [협업 지침과 Git 규칙](../AGENTS.md)
+- [에이전트 진입점과 문서 규약](agent-workflow.md)
 - [제품 요구사항](requirements.md)
 - [상세설계](lld.md)
 - [품질 기준](quality.md)
