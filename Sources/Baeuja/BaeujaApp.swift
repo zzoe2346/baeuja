@@ -40,7 +40,9 @@ import StudyCore
             }
             SidebarCommands()
             CommandGroup(after: .sidebar) {
-                Button("읽기 설정") { store.showingReadingOptions = true }.disabled(
+                Button("읽기 설정") { store.showingReadingOptions = true }.keyboardShortcut(
+                    "r", modifiers: [.command, .shift]
+                ).disabled(
                     store.selected == nil)
 
                 Button("본문 크게") {
@@ -53,6 +55,20 @@ import StudyCore
                     "0", modifiers: .command)
             }
             CommandMenu("학습") {
+                Button("이전 내용") { store.moveSection(-1) }.keyboardShortcut("[")
+                    .disabled(!store.canMoveSection(-1))
+                Button("다음 내용") { store.moveSection(1) }.keyboardShortcut("]")
+                    .disabled(!store.canMoveSection(1))
+                Button("파트 완료") { store.complete() }.keyboardShortcut(
+                    "k", modifiers: [.command, .shift]
+                )
+                .disabled(
+                    !store.canNavigate
+                        || store.progress.section != store.record?.lesson.sections.count)
+                Divider()
+                Button("생성 취소") { store.cancel() }.keyboardShortcut(".")
+                    .disabled(!store.busy)
+                Divider()
                 Button("교재 다시 생성") { store.loadLesson(force: true) }.disabled(
                     store.record == nil || store.busy)
                 Button("원본 그림 재시도") { store.retryVisuals() }.disabled(

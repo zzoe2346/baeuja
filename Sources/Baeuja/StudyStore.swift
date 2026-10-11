@@ -175,6 +175,21 @@ import StudyCore
                 lesson, courseID: course.id, ordinal: ordinal, image: provider)
         }
     }
+    var canNavigate: Bool {
+        record != nil && !busy && !showingNewCourse && !showingImport
+            && !completionPresented && !showingReadingOptions
+    }
+    func canMoveSection(_ delta: Int) -> Bool {
+        guard canNavigate, let record else { return false }
+        return (0...record.lesson.sections.count).contains(progress.section + delta)
+    }
+    @discardableResult func moveSection(_ delta: Int) -> Bool {
+        guard canMoveSection(delta) else { return false }
+        setProgress {
+            $0.section += delta; $0.scrollOffset = 0
+        }
+        return true
+    }
     func retryVisuals() {
         guard let course = selected, let old = record else { return }
         let provider = imageProvider(client: client, isDemo: course.isDemo)

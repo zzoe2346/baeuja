@@ -27,7 +27,7 @@
 | 조작 층 | macOS 26 이상에서 하단 페이지 이동·완료에 `.glass` / `.glassProminent`, 페이지 위치에 `.glassEffect(.regular, in: .capsule)`. `GlassEffectContainer`로 묶고 스크롤 viewport 아래 별도 조작 행에 배치해 본문을 가리지 않는다. |
 | 설정·편집 | 읽기 옵션 popover의 Slider/Picker, 과정 초안의 grouped Form/TextField/TextEditor/Stepper, 퀴즈의 TextEditor와 DisclosureGroup. |
 | 완료·그림 | 완료 화면도 공통 시스템 버튼 스타일을 사용하고 긴 설명은 왼쪽 정렬·여러 줄로 표시한다. 원본 그림은 이름 있는 버튼으로 기본 이미지 앱에서 확대한다. |
-| 키보드 | ⌘N 새 과정, ⌘P PDF, ⌘[ / ⌘] 내용 이동, ⌘+ / ⌘− / ⌘0 크기. OS 예약 단축키를 덮어쓰지 않는다. |
+| 키보드 | ← / →와 ⌘[ / ⌘] 내용 이동, ⌘N 새 과정, ⌘P 현재 PDF, ⇧⌘K 파트 완료, ⇧⌘R 읽기 설정, ⌘. 생성 취소, ⌘+ / ⌘− / ⌘0 크기. 입력 필드의 방향키 동작과 OS 예약 키를 보존한다. |
 | 저장 | 설정·읽던 위치·메모·선택 정답 공개는 기존 저장 계약을 유지한다. 새 디자인을 위해 교재를 다시 생성하지 않는다. |
 
 Glass API는 macOS 26 SDK 이상으로 빌드하며 `#available(macOS 26.0, *)`로 보호한다. macOS 14~25에서는 표준 bordered 버튼과 bar 재질을 사용한다. 이전 OS 실기기 실행과 접근성의 모든 시스템 조합을 검증한 것은 아니다. 투명도·대비에 관한 시스템 동작은 네이티브 재질에 맡긴다.
@@ -35,3 +35,7 @@ Glass API는 macOS 26 SDK 이상으로 빌드하며 `#available(macOS 26.0, *)`�
 SDK 헤더가 최신이어도 실행 파일의 `LC_BUILD_VERSION`이 SDK 14로 기록되면 기본 컨트롤은 이전 디자인을 사용했다. `PackageApp`은 `xcrun`의 실제 SDK를 `-platform_version`에 지정하고 `otool`로 검증한다. 최종 실행 파일은 **minOS 14.0 / SDK 27.0**이다. [Apple의 AppKit 새 디자인 안내](https://developer.apple.com/videos/play/wwdc2025/310/)에 따라 최신 SDK의 기본 툴바·사이드바·표준 컨트롤을 사용한다. 모든 내용에 Glass를 덮는 방식은 사용하지 않는다.
 
 색·모서리·흐림을 직접 모방하는 HTML/CSS 화면을 도입하지 않았다. 창과 컨트롤은 SwiftUI/AppKit이며 WebKit은 기존 로컬 그림 렌더링에만 사용한다. 앞으로 디자인을 바꿀 때도 해당 영역의 현재 Apple 지침을 먼저 확인하고 실제 앱에서 검증한다.
+
+## 2026-10-11 키보드 탐색
+
+확인 날짜: 2026-10-11. [Apple Keyboards HIG](https://developer.apple.com/design/human-interface-guidelines/keyboards/)를 기준으로 명령 단축키를 메뉴에 노출하고 방향키의 편집/컨트롤 동작을 보존한다. [NSEvent local monitor](https://developer.apple.com/documentation/appkit/nsevent/addlocalmonitorforevents(matching:handler:))는 현재 읽기 창에 한정하고 뷰 제거 시 해제한다.

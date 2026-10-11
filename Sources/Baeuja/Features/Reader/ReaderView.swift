@@ -47,6 +47,7 @@ struct ReaderView: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
         }
+        .background(ReaderKeyboard { store.moveSection($0) })
     }
     private func header(_ record: LessonRecord) -> some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -222,7 +223,7 @@ struct ReaderView: View {
             } label: {
                 Label("이전", systemImage: "chevron.left")
             }
-            .keyboardShortcut("[", modifiers: .command).studyActionStyle().disabled(
+            .help("이전 내용 (← 또는 ⌘[)").studyActionStyle().disabled(
                 section == 0 || store.busy)
             if section < record.lesson.sections.count {
                 Button {
@@ -230,7 +231,7 @@ struct ReaderView: View {
                 } label: {
                     Label("다음", systemImage: "chevron.right")
                 }
-                .keyboardShortcut("]", modifiers: .command).studyActionStyle().disabled(store.busy)
+                .help("다음 내용 (→ 또는 ⌘])").studyActionStyle().disabled(store.busy)
             } else {
                 Button(course.status == .complete ? "복습 완료" : "파트 완료") { store.complete() }
                     .studyActionStyle(prominent: true).disabled(store.busy)

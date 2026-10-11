@@ -69,3 +69,7 @@ macOS 27 SDK의 SwiftUI `State` 매크로는 Xcode 전용 플러그인을 요구
 앱 패키징은 `xcrun`으로 SDK 경로·버전을 읽고 `--sdk`와 ld의 `-platform_version macos 14.0 <실제 SDK>`를 전달한다. `--show-bin-path` 결과에서 실행 파일과 모든 리소스 번들을 복사하고 ad-hoc 서명한다. `otool`의 실행 파일 SDK가 실제 SDK와 다르면 패키징을 중지하며 `--no-build`도 같은 검사를 적용한다. Glass API를 포함한 UI 빌드에는 macOS 26 SDK 이상이 필요하다. macOS 최소 타깃14와 링크 SDK는 별개의 값이다.
 
 본문 스크롤 이벤트는 `StudyStore`의 메모리에 최신 위치를 기록하고, 350ms 동안 움직임이 없으면 저장한다. 과정·파트·내용 이동, 다른 저장 동작, 앱 비활성화·종료 전에 보류한 위치를 먼저 반영한다. 프레임마다 전체 보관함을 publish/JSON 저장하지 않는다. ASCII와 코드 블록은 가로 ScrollView 안의 고정 폭 글꼴 Text로 원래 줄과 공백을 보존한다. 페이지 이동 행은 스크롤 viewport 아래에 놓아 큰 본문과 겹치지 않는다.
+
+## 키보드 탐색 (2026-10-11)
+
+`ReaderKeyboard`는 읽기 화면이 있는 창의 수정키 없는 좌우 keyDown만 관찰한다. NSTextView/NSControl의 포커스, 다른 창, modal panel과 sheet에서는 이벤트를 전달한다. Store는 생성/편집/설정 표시 중 탐색을 막고 범위를 검사한다. 메뉴의 ⌘[ / ⌘]도 동일한 Store 명령을 사용하며 단순 방향키 이동은 학습 완료를 호출하지 않는다.
