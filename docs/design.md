@@ -27,7 +27,7 @@
 | 조작 층 | macOS 26 이상에서 하단 페이지 이동·완료에 `.glass` / `.glassProminent`, 페이지 위치에 `.glassEffect(.regular, in: .capsule)`. `GlassEffectContainer`로 묶고 스크롤 viewport 아래 별도 조작 행에 배치해 본문을 가리지 않는다. |
 | 설정·편집 | 읽기 옵션 popover의 Slider/Picker, 과정 초안의 grouped Form/TextField/TextEditor/Stepper, 퀴즈의 TextEditor와 DisclosureGroup. |
 | 완료·그림 | 완료 화면도 공통 시스템 버튼 스타일을 사용하고 긴 설명은 왼쪽 정렬·여러 줄로 표시한다. 원본 그림은 이름 있는 버튼으로 기본 이미지 앱에서 확대한다. |
-| 키보드 | ← / →와 ⌘[ / ⌘] 내용 이동, ⌘N 새 과정, ⌘P 현재 PDF, ⇧⌘K 파트 완료, ⇧⌘R 읽기 설정, ⌘. 생성 취소, ⌘+ / ⌘− / ⌘0 크기. 입력 필드의 방향키 동작과 OS 예약 키를 보존한다. |
+| 키보드 | ← / →와 ⌘[ / ⌘] 내용 이동, ⌘N 새 과정, ⌘P 현재 PDF, ⇧⌘G 전체 준비, ⇧⌘K 파트 완료, ⇧⌘R 읽기 설정, ⌘. 생성 취소, ⌘+ / ⌘− / ⌘0 크기. 입력 필드의 방향키 동작과 OS 예약 키를 보존한다. |
 | 저장 | 설정·읽던 위치·메모·선택 정답 공개는 기존 저장 계약을 유지한다. 새 디자인을 위해 교재를 다시 생성하지 않는다. |
 
 Glass API는 macOS 26 SDK 이상으로 빌드하며 `#available(macOS 26.0, *)`로 보호한다. macOS 14~25에서는 표준 bordered 버튼과 bar 재질을 사용한다. 이전 OS 실기기 실행과 접근성의 모든 시스템 조합을 검증한 것은 아니다. 투명도·대비에 관한 시스템 동작은 네이티브 재질에 맡긴다.
@@ -43,3 +43,7 @@ SDK 헤더가 최신이어도 실행 파일의 `LC_BUILD_VERSION`이 SDK 14로 �
 ## 2026-10-11 표 밝기
 
 확인 날짜: 2026-10-11. [Apple Color HIG](https://developer.apple.com/design/human-interface-guidelines/color/)의 가독성과 테마 대응을 따라 Markdown 표의 겹치는 반투명 회색 배경을 제거했다. 셀은 `textBackgroundColor`를 불투명하게 채우고 헤더만 5.5% accent tint로 구분하며 얇은 구분선을 둔다. 다크 테마도 동일한 의미적 색을 사용한다.
+
+## 2026-10-11 일괄 교재 준비
+
+전체 준비는 기존 단일 작업/취소 행을 활용하며 진행 파트를 표시한다. 계획 단계에서도 시작 시 전체 준비를 선택할 수 있다.

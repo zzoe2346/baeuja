@@ -16,6 +16,7 @@ struct PlanEditor: View {
     @ViewState<String> private var scope = ""
     @ViewState<[EditingPart]> private var parts = []
     @ViewState<String> private var adjustment = ""
+    @ViewState<Bool> private var prepareAll = false
     var body: some View {
         VStack(spacing: 0) {
             HStack {
@@ -69,6 +70,8 @@ struct PlanEditor: View {
             HStack {
                 Button("계획 저장") { save(false) }.studyActionStyle()
                 Spacer()
+                Toggle("시작할 때 전체 교재 준비", isOn: $prepareAll)
+                    .toggleStyle(.checkbox)
                 Button("이 계획으로 시작") { save(true) }.studyActionStyle(prominent: true)
             }.padding(16).background(.bar)
         }.disabled(store.busy)
@@ -95,7 +98,7 @@ struct PlanEditor: View {
                     }, minutes: part.minutes)
             })
     }
-    func save(_ start: Bool) { store.savePlan(editedPlan(), start: start) }
+    func save(_ start: Bool) { store.savePlan(editedPlan(), start: start, prepareAll: prepareAll) }
     func adjust() {
         let plan = editedPlan()
         do {

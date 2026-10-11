@@ -73,3 +73,7 @@ macOS 27 SDK의 SwiftUI `State` 매크로는 Xcode 전용 플러그인을 요구
 ## 키보드 탐색 (2026-10-11)
 
 `ReaderKeyboard`는 읽기 화면이 있는 창의 수정키 없는 좌우 keyDown만 관찰한다. NSTextView/NSControl의 포커스, 다른 창, modal panel과 sheet에서는 이벤트를 전달한다. Store는 생성/편집/설정 표시 중 탐색을 막고 범위를 검사한다. 메뉴의 ⌘[ / ⌘]도 동일한 Store 명령을 사용하며 단순 방향키 이동은 학습 완료를 호출하지 않는다.
+
+## 일괄 교재 준비 (2026-10-11)
+
+`StudyStore`는 기존 단일 job을 유지하고 `LessonBatch`에 확정 과정 스냅샷을 전달한다. Application 계층에서 미생성 파트를 ordinal 순서대로 반복하며 파트 시작/종료마다 취소를 확인한다. Store의 prepare callback은 기존 `LessonPreparation`과 CodexClient를 사용한다. 파트별 자료 채택과 원자적 보관함 저장이 성공해야 다음 파트를 시작한다. 실패 시 완료된 파트는 보존하고 자동 재시도하지 않는다. 현재 파트, 완료 진도와 메모는 변경하지 않으며 다시 실행할 때 최신 저장 상태에서 누락된 파트만 선택한다. JSON 스키마는 바뀌지 않는다.

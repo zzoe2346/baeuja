@@ -148,6 +148,16 @@ struct LibraryView: View {
                     }
                 }
             }
+            if store.selected?.status != .draft && store.selected != nil {
+                ToolbarItem(placement: .primaryAction) {
+                    Button {
+                        store.generateAllLessons()
+                    } label: {
+                        Label("전체 교재 준비", systemImage: "books.vertical").labelStyle(.titleAndIcon)
+                    }.disabled(store.busy || store.missingLessonCount == 0)
+                        .help("미생성 \(store.missingLessonCount)개 파트를 순서대로 생성 (⇧⌘G)")
+                }
+            }
             if store.record != nil {
                 ToolbarItem(placement: .primaryAction) {
                     Button {

@@ -118,13 +118,16 @@ import StudyCore
         update { $0.completeCurrent() }; completionPresented = selected?.status == .complete
         if selected?.status == .active && record == nil { loadLesson() }
     }
-    func savePlan(_ plan: Plan, start: Bool = false) {
+    func savePlan(_ plan: Plan, start: Bool = false, prepareAll: Bool = false) {
         guard selected?.status == .draft else { return }
         do {
             try plan.validate();
             update {
                 $0.plan = plan; if start { $0.status = .active }
-            }; if start { loadLesson() }
+            }
+            if start && selected?.status == .active {
+                if prepareAll { generateAllLessons() } else { loadLesson() }
+            }
         } catch { self.error = error.localizedDescription }
     }
     var client: CodexClient {
@@ -139,7 +142,9 @@ import StudyCore
         guard !busy else { return }; busy = true; activity = message
         job = Task { [weak self] in
             defer { self?.busy = false; self?.activity = ""; self?.job = nil }
-            do { try await work() } catch { self?.error = error.localizedDescription }
+            do { try await work() } catch is CancellationError {
+                // Each completed part has already been saved.
+            } catch { self?.error = error.localizedDescription }
         }
     }
     func cancel() { job?.cancel() }
@@ -175,6 +180,10 @@ import StudyCore
                 lesson, courseID: course.id, ordinal: ordinal, image: provider)
         }
     }
+    var missingLessonCount: Int {
+        guard let course = selected, course.status != .draft else { return 0 }
+        return course.plan.parts.filter { course.lessons[String($0.ordinal)] == nil }.count
+    }
     var canNavigate: Bool {
         record != nil && !busy && !showingNewCourse && !showingImport
             && !completionPresented && !showingReadingOptions
@@ -189,6 +198,31 @@ import StudyCore
             $0.section += delta; $0.scrollOffset = 0
         }
         return true
+    }
+    func generateAllLessons() {
+        guard let course = selected, missingLessonCount > 0 else { return }
+        let client = self.client
+        let provider = imageProvider(client: client, isDemo: course.isDemo)
+        run("전체 교재를 준비하고 있습니다…") { [weak self] in
+            guard let self else { return }
+            do {
+                try await LessonBatch.generate(course: course) { index, count, part in
+                    self.activity = "교재 생성 \(index)/\(count) — 파트 \(part.ordinal): \(part.title)"
+                } prepare: { part in
+                    let lesson =
+                        course.isDemo
+                        ? DemoContent.lesson(ordinal: part.ordinal)
+                        : try await client.lesson(plan: course.plan, ordinal: part.ordinal)
+                    try await self.prepareLesson(
+                        lesson, courseID: course.id, ordinal: part.ordinal, image: provider)
+                }
+            } catch {
+                if Task.isCancelled { throw CancellationError() }
+                throw StudyError.invalid(
+                    "전체 생성을 중지했습니다. 완성된 교재는 저장되어 있으며, 다시 실행하면 남은 파트부터 준비합니다. \(error.localizedDescription)"
+                )
+            }
+        }
     }
     func retryVisuals() {
         guard let course = selected, let old = record else { return }
@@ -207,12 +241,15 @@ import StudyCore
     private func prepareLesson(
         _ lesson: Lesson, courseID: UUID, ordinal: Int, image: LessonImageProvider?
     ) async throws {
-        _ = try await LessonPreparation(repository: repository).prepare(lesson, image: image) {
+        let result = try await LessonPreparation(repository: repository).prepare(
+            lesson, image: image
+        ) {
             record in
             self.update(courseID) { $0.lessons[String(ordinal)] = record }
             return self.library.courses.first(where: { $0.id == courseID })?.lessons[
                 String(ordinal)]?.revision == record.revision
         }
+        guard result != nil else { throw StudyError.storage("교재를 보관함에 저장하지 못했습니다.") }
     }
     func importLesson(_ url: URL) {
         run("교재 파일과 그림을 확인하고 있습니다…") { [weak self] in

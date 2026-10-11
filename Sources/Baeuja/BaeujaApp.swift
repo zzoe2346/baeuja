@@ -66,6 +66,9 @@ import StudyCore
                     !store.canNavigate
                         || store.progress.section != store.record?.lesson.sections.count)
                 Divider()
+                Button("전체 교재 준비") { store.generateAllLessons() }
+                    .keyboardShortcut("g", modifiers: [.command, .shift])
+                    .disabled(store.missingLessonCount == 0 || store.busy)
                 Button("생성 취소") { store.cancel() }.keyboardShortcut(".")
                     .disabled(!store.busy)
                 Divider()
