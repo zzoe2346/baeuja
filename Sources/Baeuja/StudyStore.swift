@@ -11,6 +11,7 @@ import StudyCore
     @Published var showingImport = false
     @Published var showingNewCourse = false
     @Published var completionPresented = false
+    @Published var showingPDFExport = false
     let repository: LibraryRepository
     private var writable = true
     private var job: Task<Void, Never>?
@@ -184,9 +185,14 @@ import StudyCore
         guard let course = selected, course.status != .draft else { return 0 }
         return course.plan.parts.filter { course.lessons[String($0.ordinal)] == nil }.count
     }
+    var exportableParts: [PlanPart] {
+        guard let course = selected, course.status != .draft else { return [] }
+        return course.plan.parts.sorted { $0.ordinal < $1.ordinal }
+            .filter { course.lessons[String($0.ordinal)] != nil }
+    }
     var canNavigate: Bool {
         record != nil && !busy && !showingNewCourse && !showingImport
-            && !completionPresented && !showingReadingOptions
+            && !showingPDFExport && !completionPresented && !showingReadingOptions
     }
     func canMoveSection(_ delta: Int) -> Bool {
         guard canNavigate, let record else { return false }

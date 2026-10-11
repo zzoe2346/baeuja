@@ -158,15 +158,15 @@ struct LibraryView: View {
                         .help("미생성 \(store.missingLessonCount)개 파트를 순서대로 생성 (⇧⌘G)")
                 }
             }
-            if store.record != nil {
+            if !store.exportableParts.isEmpty {
                 ToolbarItem(placement: .primaryAction) {
-                    Button {
-                        store.exportPDF()
+                    Menu {
+                        Button("현재 파트 PDF…") { store.exportPDF() }.disabled(store.record == nil)
+                        Button("전체 / 선택 파트 PDF…") { store.showingPDFExport = true }
                     } label: {
                         Label("PDF 내보내기", systemImage: "square.and.arrow.up").labelStyle(
                             .titleAndIcon)
-                    }
-                    .help("파트 PDF 내보내기 (⌘P)").disabled(store.busy)
+                    }.help("현재 파트 또는 여러 파트를 PDF로 저장").disabled(store.busy)
                 }
             }
             ToolbarItem(placement: .primaryAction) {
@@ -186,6 +186,7 @@ struct LibraryView: View {
                 }.disabled(store.busy)
             }
         }
+        .sheet(isPresented: $store.showingPDFExport) { PDFExportView(store: store) }
         .sheet(isPresented: $store.showingNewCourse) { NewCourseView(store: store) }
         .alert(
             "확인이 필요합니다",

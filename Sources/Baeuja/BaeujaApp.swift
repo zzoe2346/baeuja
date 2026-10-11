@@ -34,6 +34,9 @@ import StudyCore
                     store.busy)
                 Button("파트 PDF 내보내기") { store.exportPDF() }.keyboardShortcut("p").disabled(
                     store.record == nil || store.busy)
+                Button("전체 / 선택 파트 PDF…") { store.showingPDFExport = true }
+                    .keyboardShortcut("p", modifiers: [.command, .shift])
+                    .disabled(store.exportableParts.isEmpty || store.busy)
             }
             CommandGroup(after: .importExport) {
                 Button("교재 가져오기…") { store.showingImport = true }.disabled(store.busy)
