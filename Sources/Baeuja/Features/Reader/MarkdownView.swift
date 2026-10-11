@@ -44,14 +44,19 @@ struct MarkdownView: View {
                                             size: max(14, fontSize - 2),
                                             weight: rowIndex == 0 ? .semibold : .regular)
                                     ).lineSpacing(5).frame(maxWidth: .infinity, alignment: .leading)
-                                        .padding(12).background(
-                                            rowIndex == 0
-                                                ? Color.accentColor.opacity(0.09)
-                                                : Color.primary.opacity(0.025))
+                                        .padding(12)
+                                        .frame(maxHeight: .infinity, alignment: .topLeading)
+                                        .background(Color(nsColor: .textBackgroundColor))
+                                        .overlay {
+                                            if rowIndex == 0 {
+                                                Color.accentColor.opacity(0.055).allowsHitTesting(
+                                                    false)
+                                            }
+                                        }
                                 }
                             }
                         }
-                    }.background(Color.primary.opacity(0.1)).clipShape(
+                    }.background(Color(nsColor: .separatorColor).opacity(0.35)).clipShape(
                         RoundedRectangle(cornerRadius: 8))
                 case .quote:
                     Text(LessonMarkdown.inline(block.text)).font(.system(size: fontSize))

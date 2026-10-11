@@ -7,7 +7,7 @@
   "runtimeOS": "macOS 27.0.1 arm64",
   "sdk": "macOS 27.0",
   "swift": "6.4",
-  "provenance": "기존 QA 기록과 배포 build-info의 revision·바이너리 기록을 연결했다. 캡처 당시 별도 manifest가 없어 프레임별 바이너리 대응을 다시 입증한 것은 아니다. 이번 내부 구조·검사 정리는 화면을 바꾸지 않으므로 캡처를 유지한다. 2026-10-08 배우자 이름 변경에서도 캡처의 과정 제목, 교재와 화면 구조는 같고 제품 이름이 이 학습 화면에 나타나지 않아 기존 PNG를 유지했다. 새 앱 이름과 아이콘은 실제 메뉴와 정보 창에서 별도 확인했다.",
+  "provenance": "기존 QA 기록과 배포 build-info의 revision·바이너리 기록을 연결했다. 캡처 당시 별도 manifest가 없어 프레임별 바이너리 대응을 다시 입증한 것은 아니다. 이번 내부 구조·검사 정리는 화면을 바꾸지 않으므로 캡처를 유지한다. 2026-10-08 배우자 이름 변경에서도 캡처의 과정 제목, 교재와 화면 구조는 같고 제품 이름이 이 학습 화면에 나타나지 않아 기존 PNG를 유지했다. 새 앱 이름과 아이콘은 실제 메뉴와 정보 창에서 별도 확인했다. 2026-10-11 실제 통합 구현에서 표 화면을 캡처했다. 기능 분리 중간 커밋의 실행 화면으로 간주하지 않는다. 날짜와 바이너리 해시는 항목에 기록한다.",
   "files": [
     {
       "file": "lesson.png",
@@ -88,6 +88,20 @@
       "windowWidthPoints": 861,
       "pixelWidth": 1722,
       "pixelHeight": 1732
+    },
+    {
+      "file": "table-light.png",
+      "sha256": "39939eea290864eb8d023e05e652bfefedc29a4009cc08f273bb3ffab98175e3",
+      "origin": "기존 실제 생성 아웃박스 교재의 비교 표. 2026-10-11 Release QA 사본에서 캡처",
+      "theme": "light",
+      "fontSize": 18,
+      "windowWidthPoints": 1470,
+      "pixelWidth": 2940,
+      "pixelHeight": 1732,
+      "captureDate": "2026-10-11",
+      "sourceRevision": "b3e356d61bb4874d17e1a6c867f0a18c58c05288",
+      "workingTreeChanges": true,
+      "executableSHA256": "d7bb0042b252b08cdc97fc5b2c35345dab7ecacb4837b97370f2112b7f471e65"
     }
   ]
 }

@@ -39,3 +39,7 @@ SDK 헤더가 최신이어도 실행 파일의 `LC_BUILD_VERSION`이 SDK 14로 �
 ## 2026-10-11 키보드 탐색
 
 확인 날짜: 2026-10-11. [Apple Keyboards HIG](https://developer.apple.com/design/human-interface-guidelines/keyboards/)를 기준으로 명령 단축키를 메뉴에 노출하고 방향키의 편집/컨트롤 동작을 보존한다. [NSEvent local monitor](https://developer.apple.com/documentation/appkit/nsevent/addlocalmonitorforevents(matching:handler:))는 현재 읽기 창에 한정하고 뷰 제거 시 해제한다.
+
+## 2026-10-11 표 밝기
+
+확인 날짜: 2026-10-11. [Apple Color HIG](https://developer.apple.com/design/human-interface-guidelines/color/)의 가독성과 테마 대응을 따라 Markdown 표의 겹치는 반투명 회색 배경을 제거했다. 셀은 `textBackgroundColor`를 불투명하게 채우고 헤더만 5.5% accent tint로 구분하며 얇은 구분선을 둔다. 다크 테마도 동일한 의미적 색을 사용한다.
