@@ -94,13 +94,15 @@
         "visual_ids": {
           "type": "array",
           "items": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^v[1-9][0-9]*$"
           }
         },
         "source_ids": {
           "type": "array",
           "items": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^s[1-9][0-9]*$"
           }
         }
       }

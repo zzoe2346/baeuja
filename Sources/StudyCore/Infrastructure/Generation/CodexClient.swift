@@ -72,8 +72,7 @@ public struct CodexClient: Sendable {
             """ + "\n" + String(decoding: try StudyJSON.encoder().encode(input), as: UTF8.self)
         let (data, _) = try await generate(
             prompt: prompt, schema: schema("lesson"), timeout: settings.lessonTimeout)
-        let lesson = try StudyJSON.decoder().decode(Lesson.self, from: data); try lesson.validate();
-        return lesson
+        return try GeneratedLesson.decode(data)
     }
     public func image(prompt: String, destination: URL) async throws {
         let schema = Data(
