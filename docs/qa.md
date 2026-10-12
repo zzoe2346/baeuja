@@ -289,3 +289,9 @@ revision `7b5b9a8`, macOS 27.0.1 arm64, Swift 6.4에서 기존 교재 때문에 
 - 앱 업데이트: 사용 중이던 앱을 정상 종료하고 기존 앱과 현재 보관함을 `work/batch-fix-install-20261011/`에 백업했다. 같은 설치 경로와 기존 bundle identifier를 유지해 교체하고 다시 실행했다. 재서명 때문에 전체 바이너리 해시는 달라지지만 서명 제거 사본의 바이트 일치와 새 서명을 검증했다. 재실행 후 사용자 데이터 38개 파일의 SHA-256이 모두 동일하고 과정, 진도와 선택 파트가 유지됐다.
 
 Release 바이너리 SHA-256은 `517435f9d9319c7bb85b189e21c5ff93b3463a5fa1f3e11d8675eeb4533715a8`, 기존 설치 식별자로 재서명한 바이너리는 `206dfc6622af6b7df5afd05ffc96c82264aac57bba598c50790123ae5c330165`다. UI와 플랫폼 API는 바꾸지 않아 README 캡처와 캡처 기록은 유지했다. 로그, 실제 교재, 재생 도구와 PDF는 Git 제외 `work/batch-diagnosis/`에 보관한다. 다른 OS 실기기는 재검증하지 않았다.
+
+## 2026-10-12 README 구성 정리
+
+기준 revision `673e824`, macOS 27.0.1 arm64에서 Codex로 문서를 수정했다. 사용자 선택에 따라 [IINA](https://github.com/iina/iina/blob/develop/README.md)의 중앙 아이콘과 짧은 소개, [isowords](https://github.com/pointfreeco/isowords/blob/main/README.md)의 화면 중심 구성을 참고했다. 기존 빨간 머리띠 캐릭터를 160px로 표시하고, 대표 달 교재 아래에 학습 계획과 퀴즈를 나란히 배치했다. 학습 흐름, 주요 기능과 실행 안내를 정리하고 꼬꼬무 저장소를 연결했다.
+
+실제 앱 UI는 변경하지 않았다. 기존 공개 아이콘과 교재 캡처를 시각 검토해 그대로 사용했고, `docs/assets/screenshots.json`의 캡처 날짜와 출처 및 해시는 유지했다. 이전 버전의 학습 예시임을 README에 명시했다. `swift scripts/project-check.swift`에서 문서 링크와 스크린샷 10개 기록 검사를 통과했다. README의 HTML 링크, 제목 앵커, 이미지 대체 텍스트와 PNG 형식도 별도로 확인했다. `git diff --check`를 확인했으며 코드 변경이 없어 전체 빌드, 테스트와 AI 생성을 재실행하지 않았다. 사용자 교재와 설정은 변경하지 않았다.

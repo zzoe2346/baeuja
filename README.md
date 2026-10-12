@@ -1,38 +1,48 @@
 <p align="center">
-  <img src="Artwork/AppIcon/Preview/AppIcon-default.png" width="128" alt="노란 배경에서 머리띠를 매고 책을 읽는 캐릭터">
+  <img src="Artwork/AppIcon/Preview/AppIcon-default.png" width="160" alt="빨간 머리띠를 매고 파란 책을 읽는 배우자 캐릭터">
 </p>
 
-<h1 align="center">배우자 — Let’s Learn</h1>
+<h1 align="center">배우자</h1>
+<p align="center"><strong>Let’s Learn</strong></p>
+<p align="center">
+  궁금한 주제를 나만의 교재로, 배운 내용은 퀴즈로.<br>
+  교재와 시각자료를 만들고 복습하는 macOS 학습 앱.
+</p>
 
-배우고 싶은 주제로 **교재와 시각자료를 만들고, 퀴즈로 복습하는 macOS 학습 앱**입니다. 과학, 역사, 언어처럼 관심 있는 주제를 직접 입력해 시작할 수 있습니다.
+<p align="center">
+  <a href="#시작하기">시작하기</a> &nbsp; / &nbsp;
+  <a href="docs/usage.md">사용 안내</a> &nbsp; / &nbsp;
+  <a href="docs/development.md">개발 안내</a>
+</p>
 
-![달의 위상을 설명하는 그림과 교재를 함께 보는 실제 앱 화면](docs/assets/diagram.png)
+<p align="center">
+  <a href="docs/assets/diagram.png"><img src="docs/assets/diagram.png" width="900" alt="태양과 지구, 달의 위치를 그림과 설명으로 함께 공부하는 배우자 화면"></a>
+</p>
+<p align="center"><sub>설명과 그림을 함께 읽으며, 궁금했던 원리를 이해해보세요.</sub></p>
 
-*실제 생성 교재 예시: 태양과 지구, 달의 위치를 그림과 설명으로 함께 공부합니다.*
+<p align="center">
+  <a href="docs/assets/plan.png"><img src="docs/assets/plan.png" width="49%" alt="학습 목표와 범위를 직접 조정하는 학습 계획 화면"></a>
+  <a href="docs/assets/quiz.png"><img src="docs/assets/quiz.png" width="49%" alt="퀴즈에 직접 답하고 정답과 해설을 펼쳐보는 화면"></a>
+</p>
+<p align="center"><sub>내게 맞게 계획하기 / 퀴즈와 메모로 복습하기</sub></p>
 
-## 주요 기능
+위 화면은 이전 버전에서 촬영한 실제 생성 교재와 QA 메모의 학습 예시입니다. 최근 표와 PDF 화면, 캡처 정보는 [QA 기록](docs/qa.md)에 있습니다.
 
-- AI가 만든 학습 계획을 편집하고, 30~45분 분량의 파트로 나누어 공부합니다.
-- 설명에 맞는 개념도, 흐름도와 삽화를 교재 안에서 함께 봅니다. 그림을 크게 열거나 PDF에 담을 수도 있습니다.
-- 교재를 읽고 퀴즈를 메모로 풉니다. 정답은 원하는 때 펼칠 수 있습니다.
-- 좌우 방향키로 교재를 넘기고, 단축키로 자주 쓰는 기능을 실행합니다.
-- 한 과정의 남은 교재를 한 번에 준비하고, 취소 후에도 완성된 자료부터 이어갑니다.
-- 글자 크기를 14~36pt로 조절하고 밝은 테마, 어두운 테마 또는 시스템 설정을 선택합니다.
-- 읽던 위치와 메모를 자동 저장합니다. 교재를 가져오거나 전체/선택 파트를 개별 PDF 또는 병합 PDF로 내보낼 수 있습니다.
+## 이렇게 공부해요
 
-| 학습 계획 편집 | 퀴즈와 메모 |
-|---|---|
-| ![학습 계획 편집 화면](docs/assets/plan.png) | ![퀴즈 화면](docs/assets/quiz.png) |
+1. **궁금한 주제를 적습니다.** 과학, 역사, 언어처럼 배우고 싶은 주제로 시작합니다.
+2. **학습 계획을 다듬습니다.** AI가 제안한 목표와 범위를 조정하고, 30~45분 분량의 파트로 나눕니다.
+3. **그림과 함께 읽습니다.** 설명, 개념도와 삽화를 보며 공부하고 필요한 내용을 메모합니다.
+4. **퀴즈로 확인합니다.** 먼저 직접 풀어본 뒤, 원하는 때 정답과 해설을 펼칩니다.
 
-| 밝은 표 | 전체 / 선택 파트 PDF |
-|---|---|
-| ![실제 아웃박스 교재의 밝은 표](docs/assets/table-light.png) | ![전체 선택과 PDF 병합 옵션](docs/assets/pdf-batch.png) |
+## 읽기부터 복습까지
 
-*표와 PDF 선택 화면은 2026-10-11 버전입니다. 위의 달 교재와 계획, 퀴즈는 이전 버전에서 캡처한 학습 예시입니다.*
+- **이해를 돕는 시각자료** — 개념도, 흐름도와 삽화를 교재 안에서 함께 보고 크게 열어볼 수 있습니다.
+- **필요한 만큼 교재 준비** — 한 과정의 남은 교재를 한 번에 준비하고, 취소 후에도 완성된 자료부터 이어갑니다.
+- **내게 편한 읽기 화면** — 글자 크기를 14~36pt로 조절하고 밝은 테마, 어두운 테마 또는 시스템 설정을 선택합니다. 방향키로 페이지를 넘길 수 있습니다.
+- **공부한 내용 보관** — 읽던 위치와 메모를 자동 저장합니다. 교재를 가져오거나 전체 또는 선택 파트를 개별 PDF와 병합 PDF로 내보냅니다.
 
-더 많은 화면과 캡처 정보는 [QA 기록](docs/qa.md)에 있습니다.
-
-## 설치와 실행
+## 시작하기
 
 빌드 환경과 도구 설정은 [개발 안내](docs/development.md#빌드-환경)를 참고하세요.
 
@@ -43,29 +53,29 @@ swift run PackageApp --release
 open "dist/배우자.app"
 ```
 
-macOS 14 이상을 대상으로 합니다. 현재 실행을 확인한 환경은 macOS 27.0.1의 Apple Silicon Mac이며, 다른 OS와 Intel Mac은 아직 확인하지 않았습니다. 로컬 빌드는 ad-hoc 서명을 사용하며 공증된 배포본은 아닙니다. 자세한 지원 범위는 [호환성 안내](docs/compatibility.md)를 참고하세요.
+처음에는 **샘플 교재 둘러보기**로 로그인 없이 읽기 기능을 살펴볼 수 있습니다.
 
-처음 실행하면 **샘플 교재 둘러보기**로 로그인 없이 읽기 기능을 살펴볼 수 있습니다.
-
-## 교재 생성
-
-[Codex CLI](https://developers.openai.com/codex/cli)를 설치하고 기존 ChatGPT 구독으로 로그인합니다.
+새 교재를 만들려면 [Codex CLI](https://developers.openai.com/codex/cli)를 설치하고 기존 ChatGPT 구독으로 로그인합니다.
 
 ```sh
 codex login
 ```
 
-새 과정에서 주제를 입력한 뒤 학습 계획을 확인하고 시작하세요. 생성에는 인터넷 연결이 필요하며 구독 한도가 적용됩니다. 준비된 교재는 다시 생성하지 않고 읽을 수 있습니다.
+**새 과정**에서 주제를 입력하고 학습 계획을 확인한 뒤 시작하세요. 생성에는 인터넷 연결이 필요하며 구독 한도가 적용됩니다. 준비된 교재는 다시 생성하지 않고 읽을 수 있습니다.
+
+macOS 14 이상을 대상으로 합니다. 현재 실행을 확인한 환경은 macOS 27.0.1의 Apple Silicon Mac입니다. 다른 OS와 Intel Mac은 아직 확인하지 않았으며, 로컬 빌드는 ad-hoc 서명을 사용하는 공증되지 않은 앱입니다. [호환성 안내](docs/compatibility.md)
 
 CLI 경로 설정, 단축키, 그림 복구와 저장 위치는 [사용 안내](docs/usage.md)에 정리했습니다.
 
-## 개발
+## 개발과 문서
 
 ```sh
 ./scripts/check.sh
 ```
 
-소스 구조와 검사 방법은 [개발 안내](docs/development.md)를, 공통 기여 규칙은 [AGENTS.md](AGENTS.md)를 참고하세요. Codex, Claude 등 개발 도구별 연결은 [에이전트 운영 안내](docs/agent-workflow.md)에 있습니다. 프로젝트는 [Study TUI](https://github.com/zzoe2346/study-tui)의 학습 흐름을 이어받았습니다.
+[요구사항](docs/requirements.md) / [개발 안내](docs/development.md) / [QA 기록](docs/qa.md) / [개발 지침](AGENTS.md) / [에이전트 운영 안내](docs/agent-workflow.md)
+
+프로젝트는 [Study TUI](https://github.com/zzoe2346/study-tui)의 학습 흐름을 이어받았습니다. CS 개념과 프로젝트 경험을 꼬리 질문으로 연습하고 싶다면, 함께 만든 학습 앱 [꼬꼬무 — Kkokkomu](https://github.com/zzoe2346/kkokkomu)도 살펴보세요.
 
 ## 라이선스
 
