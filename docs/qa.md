@@ -295,3 +295,9 @@ Release 바이너리 SHA-256은 `517435f9d9319c7bb85b189e21c5ff93b3463a5fa1f3e11
 기준 revision `673e824`, macOS 27.0.1 arm64에서 Codex로 문서를 수정했다. 사용자 선택에 따라 [IINA](https://github.com/iina/iina/blob/develop/README.md)의 중앙 아이콘과 짧은 소개, [isowords](https://github.com/pointfreeco/isowords/blob/main/README.md)의 화면 중심 구성을 참고했다. 기존 빨간 머리띠 캐릭터를 160px로 표시하고, 대표 달 교재 아래에 학습 계획과 퀴즈를 나란히 배치했다. 학습 흐름, 주요 기능과 실행 안내를 정리하고 꼬꼬무 저장소를 연결했다.
 
 실제 앱 UI는 변경하지 않았다. 기존 공개 아이콘과 교재 캡처를 시각 검토해 그대로 사용했고, `docs/assets/screenshots.json`의 캡처 날짜와 출처 및 해시는 유지했다. 이전 버전의 학습 예시임을 README에 명시했다. `swift scripts/project-check.swift`에서 문서 링크와 스크린샷 10개 기록 검사를 통과했다. README의 HTML 링크, 제목 앵커, 이미지 대체 텍스트와 PNG 형식도 별도로 확인했다. `git diff --check`를 확인했으며 코드 변경이 없어 전체 빌드, 테스트와 AI 생성을 재실행하지 않았다. 사용자 교재와 설정은 변경하지 않았다.
+
+## 2026-10-12 공개 아이콘 크기 통일
+
+기준 revision `ef48764`, macOS 27.0.1 arm64에서 README 아이콘의 높이도 너비와 같은 160px로 명시했다. Icon Composer의 `ictool`로 macOS, Default, 1024×1024, scale 1, design generation 27을 내보내 기존 공개 PNG의 SHA-256 `0d6bc859109abc1e7ed368ab6e15455697861a64955b6c66a86652655004819a`와 일치함을 확인했다. 이미지 파일, 노란 배경과 앱 번들은 그대로 유지했다. 꼬꼬무가 같은 내보내기 형식으로 변경되어 프로필에서는 두 앱 모두 96×96px로 표시된다.
+
+문서 링크와 이미지 규격, `git diff --check`를 확인했다. 기본 모듈 캐시 경로 쓰기가 제한되어 임시 캐시 경로를 지정한 `swift -module-cache-path /private/tmp/baeuja-icon-check-cache scripts/project-check.swift`로 구조, 문서 링크와 스크린샷 10개 기록 검사를 통과했다. 앱 코드와 본문 화면이 같아 빌드와 학습 테스트, 기존 스크린샷 및 캡처 manifest는 갱신하지 않았다.

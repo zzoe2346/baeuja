@@ -27,3 +27,7 @@
 2026-10-08에 [Apple 앱 아이콘 지침](https://developer.apple.com/design/human-interface-guidelines/app-icons)과 [Icon Composer 안내](https://developer.apple.com/documentation/xcode/creating-your-app-icon-using-icon-composer)를 확인했습니다. 생성 이미지에 유리 효과를 그려 넣는 대신 투명 전경과 배경을 분리하고, 시스템 마스크와 Liquid Glass 재질은 Icon Composer와 macOS가 처리하도록 구성했습니다. 손과 머리띠가 잘리지 않도록 전경 배율을 80%로 조정했습니다.
 
 Icon Composer 27에서 Default, Dark와 Mono를 검토했습니다. 색상이 없어도 눈, 머리띠와 책의 형태를 구분할 수 있습니다. 어두운 표시는 시스템이 어두운 배경으로 바꿉니다. 이미지 내보내기는 정적 홍보 이미지이며, 앱은 컴파일된 네이티브 아이콘을 사용합니다. 갱신 명령은 [개발 안내](../../docs/development.md)에 있습니다.
+
+## 공개 이미지 규격
+
+2026-10-12 꼬꼬무와 공개 표시를 맞췄다. 기존 PNG는 Icon Composer의 macOS, Default, 1024×1024, scale 1, design generation 27 내보내기와 동일한 SHA-256이어서 유지한다. 프로필은 96×96px, README는 160×160px로 표시한다. 노란 배경과 앱 번들의 아이콘은 변경하지 않는다.

@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="Artwork/AppIcon/Preview/AppIcon-default.png" width="160" alt="빨간 머리띠를 매고 파란 책을 읽는 배우자 캐릭터">
+  <img src="Artwork/AppIcon/Preview/AppIcon-default.png" width="160" height="160" alt="빨간 머리띠를 매고 파란 책을 읽는 배우자 캐릭터">
 </p>
 
 <h1 align="center">배우자</h1>
