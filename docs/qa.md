@@ -1,5 +1,9 @@
 # QA 기록
 
+## 배포 버전 관리 공통 지침 (2026-10-14)
+
+기준 revision `3cf512f`, Codex, macOS 27.0.1 arm64에서 사용자의 이후 배포 운영 요청을 반영했다. `AGENTS.md`에 배포 시 앱 버전과 빌드 번호, 해당 버전 변경 이력을 함께 갱신하고 검증된 커밋의 태그를 유지하는 규칙을 추가했다. 기존 개발 안내의 절차와 일치함을 확인하고 구조, Markdown 링크 및 기존 캡처 10개 기록 검사와 `git diff --check`를 통과했다. 운영 문서만 변경했으므로 앱 빌드, 실제 UI와 AI 생성은 재실행하지 않았으며 기존 앱과 캡처를 유지했다.
+
 ## 버전 관리와 최신 설치본 정리 (2026-10-14)
 
 기준 revision `5fb038a` 이후, 같은 Codex 및 macOS 27.0.1 arm64 환경이다. `AppResources/version.json`을 앱 버전의 원본으로 추가하고 이번 배포를 `0.1.1 (4)`로 구분했다. `CHANGELOG.md`와 버전 운영 절차를 추가했으며 패키징에 소스 커밋과 미커밋 여부를 기록한다. `./scripts/format.sh`, 최종 `./scripts/check.sh` 통과: 49개 테스트, 포맷, 린트, 문서 및 캡처 기록, Release 패키징과 서명 검증. `work/spotlight-cleanup-20261014/check-versioning.log`에 결과를 보관한다.
