@@ -1,5 +1,13 @@
 # QA 기록
 
+## 빌드 번들과 설치 경로 구분 (2026-10-14)
+
+기준 revision `783345e`에서 Codex로 조사했다. macOS 27.0.1 (26A434), arm64, Swift 6.4, SDK 27.0이다. 이전 작업의 outputs, QA, 업데이트 백업과 저장소에 배우자 및 Study Swift 번들 19개가 남아 있었다. 실행 중인 앱은 outputs의 2026-10-08 바이너리였으며 최신 정식 바이너리는 2026-10-11의 저장소 dist에 있었다. 서로 다른 바이너리가 동일한 `0.1.0 (3)`을 표시했다.
+
+`PackageApp`과 서명 검사를 `dist.noindex/배우자.app`으로 변경하고, 평소 사용하는 설치 경로와 QA 사본의 정리 절차를 개발 안내에 기록했다. `./scripts/check.sh` 통과: 포맷, SwiftLint, 문서와 기존 캡처 10개, 7개 suite의 49개 테스트, Release 패키징과 서명을 확인했다. 기존 Command Line Tools의 Developer 검색 경로 링크 경고는 유지됐으며 새 실패는 없었다. 로그는 Git 제외 `work/spotlight-cleanup-20261014/check-packaging.log`에 있다.
+
+이번 검사는 패키징 경로에 대한 자동 검증이다. 실제 설치, 중복 사본 정리와 Spotlight 결과는 후속 기록에서 구분한다. 앱 본문 화면과 생성 로직을 변경하지 않아 README PNG와 `docs/assets/screenshots.json`은 유지했다. 실제 AI 호출, PDF 재검토와 다른 OS 실행은 수행하지 않았다.
+
 2026-10-08 검증 완료. 고정 샘플, 실패를 유도한 fixture, 실제 Codex 구독 생성 결과를 구분한다. 모든 실행은 별도 `--data-dir`를 사용했으며 기존 Study TUI 저장소·보관함·인증은 변경하지 않았다.
 
 ## 실행 환경

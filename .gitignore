@@ -2,6 +2,7 @@
 .swiftpm/
 .tools/
 dist/
+dist.noindex/
 work/
 data/
 exports/

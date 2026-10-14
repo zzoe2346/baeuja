@@ -50,7 +50,7 @@ let sdkPattern = #"\bsdk\s+"# + NSRegularExpression.escapedPattern(for: sdkVersi
 guard loadCommands.range(of: sdkPattern, options: .regularExpression) != nil else {
     fatalError("실행 파일의 SDK가 현재 SDK와 다릅니다. --no-build 없이 다시 빌드하세요.")
 }
-let bundle = root.appendingPathComponent("dist/배우자.app")
+let bundle = root.appendingPathComponent("dist.noindex/배우자.app")
 let contents = bundle.appendingPathComponent("Contents"),
     macOS = contents.appendingPathComponent("MacOS"),
     resources = contents.appendingPathComponent("Resources")

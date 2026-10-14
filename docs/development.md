@@ -10,9 +10,17 @@ Swift Package Manager로 빌드하는 Swift 전용 macOS 앱입니다. SwiftUI�
 
 ## 앱 이름과 호환성
 
-SPM 패키지와 실행 타깃은 `Baeuja`, 배포 번들은 `dist/배우자.app`입니다. `AppResources/ko.lproj`와 `en.lproj`의 `InfoPlist.strings`로 한국어 **배우자**, 영어 **Let’s Learn**을 표시합니다.
+SPM 패키지와 실행 타깃은 `Baeuja`, 빌드 번들은 `dist.noindex/배우자.app`입니다. `AppResources/ko.lproj`와 `en.lproj`의 `InfoPlist.strings`로 한국어 **배우자**, 영어 **Let’s Learn**을 표시합니다.
 
 기존 사용자의 교재와 환경설정을 이어 쓰기 위해 bundle identifier와 저장 경로는 유지합니다. 이전 이름이 들어간 이 두 호환성 식별자를 일괄 문자열 치환하면 기존 보관함이나 설정을 찾지 못할 수 있습니다. 이름 변경 결정은 [002: 배우자 이름과 기존 데이터 호환](decisions/002-product-name.md)에 정리했습니다.
+
+## 앱 설치와 개발용 사본
+
+평소 사용하는 앱의 설치 위치는 `/Applications/배우자.app`으로 통일합니다. `PackageApp`은 설치된 앱을 자동으로 바꾸지 않고 `dist.noindex/`에 빌드 결과를 만듭니다. 기존 `dist/`는 이전 결과물이며 새 빌드 위치가 아닙니다.
+
+업데이트할 때는 진행 중인 생성이 끝난 뒤 앱을 정상 종료하고, 기존 설치 번들을 압축 백업한 다음 새 번들로 교체합니다. bundle identifier `com.zzoe.study-swift`와 기존 `StudySwift` 보관함을 유지하고, 설치본의 서명과 버전, 재실행 후 과정과 메모를 확인합니다. QA용 식별자를 평소 쓰는 설치본에 적용하지 않습니다.
+
+QA 앱은 격리된 보관함과 별도 식별자로 `work/qa-apps.noindex/` 아래에서 실행합니다. 검토가 끝나면 종료하고 필요한 번들만 ZIP으로 보관합니다. 업데이트 백업도 실행 가능한 `.app` 디렉터리를 여러 위치에 남기지 않고 압축합니다. `.gitignore`는 Git 추적만 막으며 검색 제외 설정이 아닙니다. `.noindex` 밖의 개발 폴더를 검색에서 제외해야 할 때는 [Apple의 Spotlight 검색 제외 안내](https://support.apple.com/en-gb/guide/mac-help/mchl1bb43b84/26/mac/26)를 따릅니다. 이 안내와 현재 Mac의 검색 결과는 2026-10-14에 확인했습니다.
 
 ## 공통 검사
 

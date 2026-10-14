@@ -50,8 +50,10 @@
 git clone https://github.com/zzoe2346/baeuja.git
 cd baeuja
 swift run PackageApp --release
-open "dist/배우자.app"
+open "dist.noindex/배우자.app"
 ```
+
+계속 사용할 앱은 `/Applications/배우자.app`에 복사해 실행합니다. 업데이트와 개발용 사본 정리는 [개발 안내](docs/development.md#앱-설치와-개발용-사본)를 참고하세요.
 
 처음에는 **샘플 교재 둘러보기**로 로그인 없이 읽기 기능을 살펴볼 수 있습니다.
 
