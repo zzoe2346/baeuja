@@ -18,6 +18,8 @@ Domain은 상위 계층을 참조하지 않고, UI는 Application/Infrastructure
 
 `Baeuja`는 SwiftUI 화면과 메인 액터의 `StudyStore`를 소유한다. `StudyCore`는 Codable 모델·검증, 원자적 보관함, Codex CLI, 시각자료와 PDF를 제공한다. `PackageApp`은 Swift 빌드 결과를 `.app`으로 묶는다. `RunTests`는 Swift Testing의 도구 환경을 준비하고, `StudyQA`는 격리된 로컬/실제 구독 QA를 실행한다. Python·별도 HTTP 서버·외부 패키지 의존성은 없다.
 
+`PackageApp`은 `AppResources/version.json`의 앱 버전과 빌드 번호를 검증해 번들 Info.plist에 넣는다. 소스 revision과 미커밋 변경 여부도 기록하며 Git 정보가 없으면 revision은 `unknown`, 변경 여부는 보수적으로 true로 기록한다. 출력은 `dist.noindex/배우자.app`이며 `/Applications/배우자.app` 설치본을 자동으로 교체하지 않는다. 버전과 설치 운영은 [개발 안내](development.md#버전과-변경-이력)를 따른다.
+
 ```text
 SwiftUI / AppKit
        |

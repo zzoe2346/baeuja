@@ -4,6 +4,20 @@ let manager = FileManager.default
 let root = URL(fileURLWithPath: manager.currentDirectoryPath)
 let release = CommandLine.arguments.contains("--release")
 let configuration = release ? "release" : "debug"
+struct AppVersion: Decodable {
+    let version: String
+    let build: Int
+}
+let appVersion = try JSONDecoder().decode(
+    AppVersion.self,
+    from: Data(contentsOf: root.appendingPathComponent("AppResources/version.json")))
+guard
+    appVersion.version.range(
+        of: #"^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$"#, options: .regularExpression)
+        != nil, (1...9999).contains(appVersion.build)
+else {
+    fatalError("앱 버전은 정수 세 개(예: 0.1.1), 빌드 번호는 1~9999 정수여야 합니다.")
+}
 func run(_ executable: String, _ arguments: [String]) throws {
     let process = Process(); process.executableURL = URL(fileURLWithPath: executable);
     process.arguments = arguments
@@ -12,14 +26,15 @@ func run(_ executable: String, _ arguments: [String]) throws {
         throw NSError(domain: "PackageApp", code: Int(process.terminationStatus))
     }
 }
-func output(_ executable: String, _ arguments: [String]) throws -> String {
+func output(_ executable: String, _ arguments: [String], allowEmpty: Bool = false) throws -> String
+{
     let process = Process(); process.executableURL = URL(fileURLWithPath: executable);
     process.arguments = arguments
     let pipe = Pipe(); process.standardOutput = pipe
     try process.run(); let data = pipe.fileHandleForReading.readDataToEndOfFile();
     process.waitUntilExit()
     guard process.terminationStatus == 0, let value = String(data: data, encoding: .utf8),
-        !value.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        allowEmpty || !value.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     else {
         throw NSError(domain: "PackageApp", code: Int(process.terminationStatus))
     }
@@ -73,10 +88,16 @@ var info: [String: Any] = [
     "CFBundleDevelopmentRegion": "ko", "CFBundleLocalizations": ["ko", "en"],
     // Keep the installed app identity so existing preferences remain available.
     "CFBundleIdentifier": "com.zzoe.study-swift", "CFBundleExecutable": "Baeuja",
-    "CFBundlePackageType": "APPL", "CFBundleShortVersionString": "0.1.0", "CFBundleVersion": "3",
+    "CFBundlePackageType": "APPL", "CFBundleShortVersionString": appVersion.version,
+    "CFBundleVersion": String(appVersion.build),
     "LSMinimumSystemVersion": minimumVersion, "DTSDKName": "macosx" + sdkVersion,
     "NSHighResolutionCapable": true, "NSPrincipalClass": "NSApplication",
 ]
+// Local source archives may not include Git metadata. Keep that absence explicit.
+info["BaeujaSourceRevision"] = (try? output("/usr/bin/git", ["rev-parse", "HEAD"])) ?? "unknown"
+let sourceStatus = try? output(
+    "/usr/bin/git", ["status", "--porcelain", "--untracked-files=normal"], allowEmpty: true)
+info["BaeujaSourceModified"] = sourceStatus.map { !$0.isEmpty } ?? true
 let iconInfo = try installAppIcon(
     root: root, resources: resources, refresh: CommandLine.arguments.contains("--refresh-icon"))
 info.merge(iconInfo) { _, iconValue in iconValue }

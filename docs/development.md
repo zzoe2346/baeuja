@@ -22,6 +22,24 @@ SPM 패키지와 실행 타깃은 `Baeuja`, 빌드 번들은 `dist.noindex/배�
 
 QA 앱은 격리된 보관함과 별도 식별자로 `work/qa-apps.noindex/` 아래에서 실행합니다. 검토가 끝나면 종료하고 필요한 번들만 ZIP으로 보관합니다. 업데이트 백업도 실행 가능한 `.app` 디렉터리를 여러 위치에 남기지 않고 압축합니다. `.gitignore`는 Git 추적만 막으며 검색 제외 설정이 아닙니다. `.noindex` 밖의 개발 폴더를 검색에서 제외해야 할 때는 [Apple의 Spotlight 검색 제외 안내](https://support.apple.com/en-gb/guide/mac-help/mchl1bb43b84/26/mac/26)를 따릅니다. 이 안내와 현재 Mac의 검색 결과는 2026-10-14에 확인했습니다.
 
+## 버전과 변경 이력
+
+[AppResources/version.json](../AppResources/version.json)이 앱 버전과 빌드 번호의 원본입니다. `PackageApp`이 이를 읽어 `CFBundleShortVersionString`과 `CFBundleVersion`에 넣습니다. 예를 들어 `0.1.1 (4)`는 앱 버전 0.1.1의 빌드 4입니다. 설치하거나 전달할 새 빌드는 번호를 증가시키며 같은 소스로 검사를 반복할 때는 증가시키지 않습니다. 빌드 번호는 버전이 바뀌어도 되돌리지 않습니다.
+
+| 변경 | 앱 버전 예시 |
+|---|---|
+| 버그 수정과 배포 정리 | `0.1.0` → `0.1.1` |
+| 학습 기능 추가 | `0.1.1` → `0.2.0` |
+| 첫 안정 배포 또는 이후 호환성을 깨는 변경 | `0.x.y` → `1.0.0`, 이후 major 증가 |
+
+0.x에서는 아직 안정화 중임을 나타내며 저장 형식 변경은 버전 숫자와 별도로 이전 설계와 검증이 필요합니다. 버전 규칙은 이 앱의 운영 선택입니다.
+
+[CHANGELOG.md](../CHANGELOG.md)는 사용자에게 달라지는 기능, 수정과 필요한 이전 안내를 버전, 날짜와 함께 기록합니다. 작업 중에는 `미배포`에 추가하고 배포할 때 버전 절로 옮깁니다. Git 커밋은 구현의 변경 단위이고, 한 앱 버전에는 검증된 여러 커밋이 포함될 수 있습니다. [QA 기록](qa.md)은 검사 환경, 결과와 한계를 기록하며 변경 이력과 구분합니다.
+
+배포 순서는 버전과 빌드 번호 갱신, 변경 이력 정리, `./scripts/check.sh`, 커밋, 깨끗한 작업 트리에서 다시 패키징, 설치와 재개 검증, 검증된 커밋의 `v0.1.1` 형식 태그입니다. 태그는 다시 다른 커밋으로 옮기지 않습니다. 번들에는 `BaeujaSourceRevision`과 `BaeujaSourceModified`도 기록합니다. Git 정보가 없는 소스 사본에서는 revision을 `unknown`으로 표시하므로 정식 배포는 Git 체크아웃에서 만듭니다.
+
+2026-10-14에 Apple 공식 [앱 버전](https://developer.apple.com/documentation/bundleresources/information-property-list/cfbundleshortversionstring)과 [빌드 버전](https://developer.apple.com/documentation/bundleresources/information-property-list/cfbundleversion) 문서를 확인했습니다. 앱 버전은 세 정수, 빌드는 증가하는 단일 정수로 사용합니다. 기존 앱 정보 창이 이 값을 표시하며 새 화면은 추가하지 않습니다.
+
 ## 공통 검사
 
 ```sh
